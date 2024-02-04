@@ -28,6 +28,8 @@ import typescript from "./tech/typescript.png";
 import threejs from "./tech/threejs.svg";
 
 import enova from "./company/enova.png";
+import irontech from "./company/irontech.png";
+
 
 import carrent from "./carrent.png";
 import jobit from "./jobit.png";
@@ -59,6 +61,7 @@ export {
   typescript,
   threejs,
   enova,
+  irontech,
   carrent,
   jobit,
   tripguide,

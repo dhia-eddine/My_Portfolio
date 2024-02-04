@@ -15,6 +15,7 @@ import {
   adobexd,
   java,
   enova,
+  irontech,
   carrent,
   jobit,
   tripguide,
@@ -147,6 +148,27 @@ const experiences = [
     ],
     project_d:
       "Development of a Monitoring Dashboard for P-Guard (security robot), featuring the ability to monitor a selected robot and generate reports on-demand using a laptop or mobile device.",
+  },
+  {
+    title: "Backend developer",
+    company_name: "IRON TECH",
+    icon: irontech,
+    iconBg: "#E6DEDD" /*"#383E56"*/,
+    date: "July 2023 - August 2023",
+    key_q: "Key Qualifications",
+    points: [
+      "Project initiation and planning.",
+      "Developing and maintaining web applications using Angular, Django and other related technologies.",
+      "Define application constants: colors, margins, paddings, border radius and sizes.",
+      "Apply adapter design pattern.",
+      "Implementing responsive design and ensuring cross-browser compatibility.",
+      "Add google map developer SDK",
+      "Consume APIs",
+      "Implementing a forgot password",
+      "Participating in code reviews and providing constructive feedback to other developers.",
+    ],
+    project_d:
+      "Engineered a comprehensive job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
   },
 ];
 
