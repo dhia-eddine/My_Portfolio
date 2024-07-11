@@ -16,6 +16,7 @@ import {
   java,
   enova,
   irontech,
+  logo,
   carrent,
   jobit,
   tripguide,
@@ -129,6 +130,42 @@ const technologies = [
 
 const experiences = [
   {
+    title: "Full Stack",
+    company_name: " ",
+    icon: logo,
+    iconBg: "#E6DEDD" /*"#383E56"*/,
+    date: "Mars 2024 - May 2024",
+    key_q: "Key Qualifications",
+    points: [
+      "Developed a comprehensive web-based platform for efficient gym management operations.",
+      "Enabled streamlined membership and subscription management.",
+      "Coordinated coaching activities.",
+      "Displayed an insightful dashboard with active member count, coach count, and earnings overview.",
+      "Implementing responsive design and ensuring cross-browser compatibility.",
+      "Participating in code reviews and providing constructive feedback to other developers.",
+    ],
+    project_d:
+      "Developed a comprehensive web-based platform for efficient gym management operations, enabling streamlined membership and subscription management, and coaching coordination and displaying an insightful dashboard with active member count, coach count, and earnings overview.",
+  },
+  
+  {
+    title: "Backend developer",
+    company_name: "IRON TECH",
+    icon: irontech,
+    iconBg: "#383E56" /*"#383E56"*/,
+    date: "July 2023 - August 2023",
+    key_q: "Key Qualifications",
+    points: [
+      "Developed a comprehensive job assessment platform with a powerful backend infrastructure.",
+      "Facilitated seamless assessment tests and comprehensive administrative capabilities.",
+      "Apply adapter design pattern.",
+      "Followed Agile Scrum methodology for project management and collaboration.",
+      "Participating in code reviews and providing constructive feedback to other developers.",
+    ],
+    project_d:
+      "Engineered a comprehensive job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
+  },
+  {
     title: "Web Developer",
     company_name: "Enova ROBOCTICS",
     icon: enova,
@@ -149,27 +186,9 @@ const experiences = [
     project_d:
       "Development of a Monitoring Dashboard for P-Guard (security robot), featuring the ability to monitor a selected robot and generate reports on-demand using a laptop or mobile device.",
   },
-  {
-    title: "Backend developer",
-    company_name: "IRON TECH",
-    icon: irontech,
-    iconBg: "#E6DEDD" /*"#383E56"*/,
-    date: "July 2023 - August 2023",
-    key_q: "Key Qualifications",
-    points: [
-      "Project initiation and planning.",
-      "Developing and maintaining web applications using Angular, Django and other related technologies.",
-      "Define application constants: colors, margins, paddings, border radius and sizes.",
-      "Apply adapter design pattern.",
-      "Implementing responsive design and ensuring cross-browser compatibility.",
-      "Add google map developer SDK",
-      "Consume APIs",
-      "Implementing a forgot password",
-      "Participating in code reviews and providing constructive feedback to other developers.",
-    ],
-    project_d:
-      "Engineered a comprehensive job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
-  },
+  
+
+ 
 ];
 
 const testimonials = [
