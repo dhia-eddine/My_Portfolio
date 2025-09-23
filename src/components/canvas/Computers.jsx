@@ -21,14 +21,16 @@ const Computers = ({ isMobile }) => {
       <primitive
         object={computer.scene}
         scale={isMobile ? 0.5 : 0.75}
-        position={isMobile ? [0, -2, -1.6] : [0, -3.25, -1.5]}
-        rotation={[-0.01, -0.2, -0.1]}
+        position={isMobile ? [0, -2, 0] : [0, -3.25, 0]}
+        rotation={[-0.01, Math.PI, -0.1]}
       />
     </mesh>
   );
 };
+
 const ComputersCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
+  
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width:650px)");
     setIsMobile(mediaQuery.matches);
@@ -36,7 +38,9 @@ const ComputersCanvas = () => {
     const handleMediaQueryChange = (event) => {
       setIsMobile(event.matches);
     };
+    
     mediaQuery.addEventListener("change", handleMediaQueryChange);
+    
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
     };
@@ -54,6 +58,7 @@ const ComputersCanvas = () => {
           enableZoom={false}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
+          target={[0, 0, 0]}
         />
         <Computers isMobile={isMobile} />
       </Suspense>
@@ -61,4 +66,5 @@ const ComputersCanvas = () => {
     </Canvas>
   );
 };
+
 export default ComputersCanvas;
