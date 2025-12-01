@@ -129,6 +129,23 @@ const technologies = [
 ];
 
 const experiences = [
+    {
+    title: "Full Stack",
+    company_name: "Enova ROBOCTICS ",
+    icon: enova,
+    iconBg: "#E6DEDD" /*"#383E56"*/,
+    date: "february 2025 - june 2025",
+    key_q: "Key Qualifications",
+    points: [
+  "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
+  "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
+  "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
+  "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
+  "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+],
+project_d:
+  "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+},
   {
     title: "Full Stack",
     company_name: " ",
@@ -145,7 +162,7 @@ const experiences = [
       "Participating in code reviews and providing constructive feedback to other developers.",
     ],
     project_d:
-      "Developed a comprehensive web-based platform for efficient gym management operations, enabling streamlined membership and subscription management, and coaching coordination and displaying an insightful dashboard with active member count, coach count, and earnings overview.",
+      "Developed a web-based platform for efficient gym management operations, enabling streamlined membership and subscription management, and coaching coordination and displaying an insightful dashboard with active member count, coach count, and earnings overview.",
   },
   
   {
@@ -156,14 +173,14 @@ const experiences = [
     date: "July 2023 - August 2023",
     key_q: "Key Qualifications",
     points: [
-      "Developed a comprehensive job assessment platform with a powerful backend infrastructure.",
+      "Developed a job assessment platform with a powerful backend infrastructure.",
       "Facilitated seamless assessment tests and comprehensive administrative capabilities.",
       "Apply adapter design pattern.",
       "Followed Agile Scrum methodology for project management and collaboration.",
       "Participating in code reviews and providing constructive feedback to other developers.",
     ],
     project_d:
-      "Engineered a comprehensive job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
+      "Engineered a job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
   },
   {
     title: "Web Developer",
