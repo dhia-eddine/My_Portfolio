@@ -25,6 +25,7 @@ import {
   django,
   python,
   nestjs,
+  proxicon
 } from "../assets";
 
 export const navLinks = [
@@ -146,6 +147,23 @@ const experiences = [
 project_d:
   "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
 },
+{
+    title: "Backend developer",
+    company_name: "proxym",
+    icon: proxicon,
+    iconBg: "#383E56" /*"#383E56"*/,
+    date: "september 2024 - octobre 2024",
+    key_q: "Key Qualifications",
+    points: [
+  "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
+  "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
+  "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
+  "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
+  "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+],
+project_d:
+  "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+},
   {
     title: "Full Stack",
     company_name: " ",
@@ -154,16 +172,15 @@ project_d:
     date: "Mars 2024 - May 2024",
     key_q: "Key Qualifications",
     points: [
-      "Developed a comprehensive web-based platform for efficient gym management operations.",
-      "Enabled streamlined membership and subscription management.",
-      "Coordinated coaching activities.",
-      "Displayed an insightful dashboard with active member count, coach count, and earnings overview.",
-      "Implementing responsive design and ensuring cross-browser compatibility.",
-      "Participating in code reviews and providing constructive feedback to other developers.",
-    ],
-    project_d:
-      "Developed a web-based platform for efficient gym management operations, enabling streamlined membership and subscription management, and coaching coordination and displaying an insightful dashboard with active member count, coach count, and earnings overview.",
-  },
+  "Developed a data processing application using Spring Boot and Spring Batch for efficient handling of large datasets.",
+  "Configured CSV processing pipelines to ensure robust batch execution and data integrity.",
+  "Integrated REST APIs and PostgreSQL to support dynamic and reliable backend operations.",
+  "Applied clean coding standards and best practices throughout the development process.",
+  "Collaborated within a team environment while using Docker for containerization and GitHub for streamlined version control and deployment workflows.",
+],
+project_d:
+  "Developed a scalable data processing application using Spring Boot and Spring Batch, enabling efficient CSV configuration, robust batch execution, REST API integration, and PostgreSQL-based data operations, while leveraging Docker and GitHub to optimize deployment workflows and maintain system reliability.",
+},
   
   {
     title: "Backend developer",

@@ -8,6 +8,7 @@ import github from "./github.png";
 import menu from "./menu.svg";
 import close from "./close.svg";
 
+
 import css from "./tech/css.png";
 import angular from "./tech/angular.png";
 import django from "./tech/django.png";
@@ -28,6 +29,8 @@ import typescript from "./tech/typescript.png";
 import threejs from "./tech/threejs.svg";
 
 import enova from "./company/enova.png";
+import proxicon from "./company/proxicon.png";
+
 import irontech from "./company/irontech.png";
 
 
@@ -66,4 +69,5 @@ export {
   jobit,
   tripguide,
   nestjs,
+  proxicon,
 };

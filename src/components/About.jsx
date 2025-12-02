@@ -40,7 +40,7 @@ const About = () => {
       >
         I am a highly skilled software developer proficient in TypeScript,
         JavaScript, Java, and Python, with extensive experience working with
-        frameworks such as Angular and React. My expertise allows me to quickly
+        frameworks such as ReactJS, NextJS, NestJs and many others. My expertise allows me to quickly
         grasp new concepts and work closely with clients to develop efficient,
         scalable, and user-friendly solutions that solve real-world challenges.
         By collaborating, we can transform your ideas into tangible, innovative
