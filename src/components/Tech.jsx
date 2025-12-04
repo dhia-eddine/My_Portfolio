@@ -1,7 +1,6 @@
 import { technologies } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { BallCanvas } from "./canvas";
-/* eslint-disable react/jsx-key */
 const Tech = () => {
   return (
     <div className="flex flex-row flex-wrap justify-center gap-10">
