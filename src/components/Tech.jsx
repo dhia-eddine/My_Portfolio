@@ -1,6 +1,10 @@
 import { technologies } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { BallCanvas } from "./canvas";
+/**
+ *
+ * @returns {JSX.Element}
+ */
 const Tech = () => {
   return (
     <div className="flex flex-row flex-wrap justify-center gap-10">
