@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types -- Ball/BallCanvas receive icon/imgUrl from parent */
+/* eslint-disable react/no-unknown-property -- R3F/Three.js primitives use intensity, position, args, etc. */
 import {
   Decal,
   Float,
@@ -6,11 +8,10 @@ import {
   useTexture,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import CanvasLoader from "../Loader";
-import { AmbientLight } from "three";
 
-const Ball = (props) => {
+export const Ball = (props) => {
   const [decal] = useTexture([props.imgUrl]);
   return (
     <Float speed={1.75} rotationIntensity={1} floatIntensity={2}>
@@ -29,11 +30,11 @@ const Ball = (props) => {
           position={[0, 0, -1.1]}
           rotation={[0, 3, 6.25]}
           map={decal}
-        />{" "}
+        />
         {/*back*/}
         <Decal position={[0, 1, 0]} rotation={[1.5, 3, 3]} map={decal} />
         {/*top*/}
-        <Decal position={[0, -1, 0]} rotation={[5, 3, 3]} map={decal} />{" "}
+        <Decal position={[0, -1, 0]} rotation={[5, 3, 3]} map={decal} />
         {/*bottom*/}
         <Decal position={[0.6, 0, 0]} rotation={[0, 1, 6.25]} map={decal} />
         {/*right*/}
@@ -41,7 +42,7 @@ const Ball = (props) => {
           position={[-0.6, 0, 0]}
           rotation={[0, 5, 6.25]}
           map={decal}
-        />{" "}
+        />
         {/*left*/}
       </mesh>
     </Float>
@@ -49,11 +50,19 @@ const Ball = (props) => {
 };
 
 const BallCanvas = ({ icon }) => {
+  const iconUrl = icon && typeof icon === "string" ? icon : null;
+  if (!iconUrl) {
+    return (
+      <div className="w-full h-full min-h-[112px] flex items-center justify-center rounded-full bg-white/5 border border-white/10">
+        <span className="text-white/40 text-xs">—</span>
+      </div>
+    );
+  }
   return (
     <Canvas frameloop="demand" gl={{ preserveDrawingBuffer: true }}>
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls enableZoom={false} />
-        <Ball imgUrl={icon} />
+        <Ball imgUrl={iconUrl} />
       </Suspense>
       <Preload all />
     </Canvas>

@@ -1,10 +1,34 @@
 import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import { styles } from "../styles";
 import { ComputersCanvas } from "./canvas";
+import ErrorBoundary from "./ErrorBoundary";
+
+const COMPUTER_LOAD_TIMEOUT_MS = 2500;
+
+function ComputerFallback() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] rounded-2xl bg-primary/30" />
+    </div>
+  );
+}
 
 const Hero = () => {
+  const [loaded, setLoaded] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+
+  const onLoaded = useCallback(() => setLoaded(true), []);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!loaded) setShowFallback(true);
+    }, COMPUTER_LOAD_TIMEOUT_MS);
+    return () => clearTimeout(t);
+  }, [loaded]);
+
   return (
-    <section className="relative w-full h-screen mx-auto">
+    <section className="relative w-full h-screen mx-auto bg-primary">
       <div
         className={`${styles.paddingX} absolute inset-0 top-[120px] max-w-7xl mx-auto flex flex-row items-start gap-5`}
       >
@@ -14,7 +38,7 @@ const Hero = () => {
         </div>
         <div>
           <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I'm <span className="text-[#915eff]">Dhia </span>
+            Hi, I&apos;m <span className="text-[#915eff]">Dhia </span>
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
             I devolop web applications <br className="sm:block hidden" /> and
@@ -22,7 +46,17 @@ const Hero = () => {
           </p>
         </div>
       </div>
-      {/* <ComputersCanvas /> */}
+      {/* 3D computer: centered, fixed size */}
+      <ComputerFallback />
+      {!showFallback && (
+        <ErrorBoundary fallback={null}>
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] pointer-events-auto">
+              <ComputersCanvas onLoaded={onLoaded} />
+            </div>
+          </div>
+        </ErrorBoundary>
+      )}
       <div className="absolute xs:bottom-10 bottom-32 w-full flex justify-center items-center">
         <a href="#about">
           <div className="w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2 ">

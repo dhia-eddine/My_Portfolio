@@ -17,15 +17,28 @@ import {
   enova,
   irontech,
   logo,
-  carrent,
-  jobit,
-  tripguide,
   threejs,
   angular,
   django,
   python,
   nestjs,
-  proxicon
+  proxicon,
+  cobotList,
+  cobotList2,
+  cobotContr,
+  cobotContr2,
+  cobotMoves,
+  cobotSim,
+  trajCr1,
+  trajCr2,
+  trajList,
+  kpiMon,
+  kpiMon2,
+  usersManag,
+  addUser,
+  auth1,
+  pdf1,
+  reportPdf,
 } from "../assets";
 
 export const navLinks = [
@@ -130,7 +143,22 @@ const technologies = [
 ];
 
 const experiences = [
-    {
+  {
+    title: "Full Stack Developer",
+    company_name: "Moonify-Tech",
+    icon: logo,
+    iconBg: "#E6DEDD",
+    date: "01/2026 – Present",
+    key_q: "Key Qualifications",
+    points: [
+      "Developing a payroll management system for Iron School platform, designing and implementing employee contracts, payslip generation, and payment tracking modules with full-stack solutions using Prisma ORM, PostgreSQL, NestJS, React.",
+      "Architected RESTful API endpoints following NestJS best practices with role-based access control (RBAC), and built responsive user interfaces using React and FastAdmin framework for efficient data management and user interaction.",
+      "Conducted thorough E2E testing and integration testing across full stack components to ensure system reliability and data integrity.",
+    ],
+    project_d:
+      "Developing a payroll management system for Iron School platform with employee contracts, payslip generation, and payment tracking using Prisma ORM, PostgreSQL, NestJS, and React, with RESTful APIs, RBAC, and comprehensive E2E and integration testing.",
+  },
+  {
     title: "Full Stack",
     company_name: "Enova ROBOCTICS ",
     icon: enova,
@@ -138,16 +166,16 @@ const experiences = [
     date: "february 2025 - june 2025",
     key_q: "Key Qualifications",
     points: [
-  "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
-  "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
-  "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
-  "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
-  "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
-],
-project_d:
-  "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
-},
-{
+      "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
+      "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
+      "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
+      "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
+      "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+    ],
+    project_d:
+      "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+  },
+  {
     title: "Backend developer",
     company_name: "proxym",
     icon: proxicon,
@@ -155,15 +183,15 @@ project_d:
     date: "september 2024 - octobre 2024",
     key_q: "Key Qualifications",
     points: [
-  "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
-  "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
-  "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
-  "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
-  "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
-],
-project_d:
-  "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
-},
+      "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
+      "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
+      "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
+      "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
+      "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+    ],
+    project_d:
+      "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+  },
   {
     title: "Full Stack",
     company_name: " ",
@@ -172,16 +200,16 @@ project_d:
     date: "Mars 2024 - May 2024",
     key_q: "Key Qualifications",
     points: [
-  "Developed a data processing application using Spring Boot and Spring Batch for efficient handling of large datasets.",
-  "Configured CSV processing pipelines to ensure robust batch execution and data integrity.",
-  "Integrated REST APIs and PostgreSQL to support dynamic and reliable backend operations.",
-  "Applied clean coding standards and best practices throughout the development process.",
-  "Collaborated within a team environment while using Docker for containerization and GitHub for streamlined version control and deployment workflows.",
-],
-project_d:
-  "Developed a scalable data processing application using Spring Boot and Spring Batch, enabling efficient CSV configuration, robust batch execution, REST API integration, and PostgreSQL-based data operations, while leveraging Docker and GitHub to optimize deployment workflows and maintain system reliability.",
-},
-  
+      "Developed a data processing application using Spring Boot and Spring Batch for efficient handling of large datasets.",
+      "Configured CSV processing pipelines to ensure robust batch execution and data integrity.",
+      "Integrated REST APIs and PostgreSQL to support dynamic and reliable backend operations.",
+      "Applied clean coding standards and best practices throughout the development process.",
+      "Collaborated within a team environment while using Docker for containerization and GitHub for streamlined version control and deployment workflows.",
+    ],
+    project_d:
+      "Developed a scalable data processing application using Spring Boot and Spring Batch, enabling efficient CSV configuration, robust batch execution, REST API integration, and PostgreSQL-based data operations, while leveraging Docker and GitHub to optimize deployment workflows and maintain system reliability.",
+  },
+
   {
     title: "Backend developer",
     company_name: "IRON TECH",
@@ -220,102 +248,42 @@ project_d:
     project_d:
       "Development of a Monitoring Dashboard for P-Guard (security robot), featuring the ability to monitor a selected robot and generate reports on-demand using a laptop or mobile device.",
   },
-  
-
- 
-];
-
-const testimonials = [
-  {
-    testimonial:
-      "I thought it was impossible to make a website as beautiful as our product, but Rick proved me wrong.",
-    name: "Sara Lee",
-    designation: "CFO",
-    company: "Acme Co",
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-  },
-  {
-    testimonial:
-      "I've never met a web developer who truly cares about their clients' success like Rick does.",
-    name: "Chris Brown",
-    designation: "COO",
-    company: "DEF Corp",
-    image: "https://randomuser.me/api/portraits/men/5.jpg",
-  },
-  {
-    testimonial:
-      "After Rick optimized our website, our traffic increased by 50%. We can't thank them enough!",
-    name: "Lisa Wang",
-    designation: "CTO",
-    company: "456 Enterprises",
-    image: "https://randomuser.me/api/portraits/women/6.jpg",
-  },
 ];
 
 const projects = [
   {
-    name: "Car Rent",
+    id: "enova-robotics-cobot",
+    name: "Enova Robotics – UR10e Cobot Control",
     description:
-      "Web-based platform that allows users to search, book, and manage car rentals from various providers, providing a convenient and efficient solution for transportation needs.",
+      "Responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, and multi-user management. Built with Next.js, React.js, TailwindCSS, and Three.js on the frontend, with a secure backend using NestJS, Python, WebSockets, and JWT authentication.",
     tags: [
-      {
-        name: "react",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "mongodb",
-        color: "green-text-gradient",
-      },
-      {
-        name: "tailwind",
-        color: "pink-text-gradient",
-      },
+      { name: "Next.js", color: "blue-text-gradient" },
+      { name: "React", color: "blue-text-gradient" },
+      { name: "NestJS", color: "green-text-gradient" },
+      { name: "Three.js", color: "pink-text-gradient" },
+      { name: "Tailwind", color: "pink-text-gradient" },
     ],
-    image: carrent,
+    image: cobotSim,
     source_code_link: "https://github.com/",
-  },
-  {
-    name: "Job IT",
-    description:
-      "Web application that enables users to search for job openings, view estimated salary ranges for positions, and locate available jobs based on their current location.",
-    tags: [
-      {
-        name: "react",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "restapi",
-        color: "green-text-gradient",
-      },
-      {
-        name: "scss",
-        color: "pink-text-gradient",
-      },
+    gallery: [
+      cobotSim,
+      cobotList,
+      cobotList2,
+      cobotContr,
+      cobotContr2,
+      cobotMoves,
+      trajCr1,
+      trajCr2,
+      trajList,
+      kpiMon,
+      kpiMon2,
+      usersManag,
+      addUser,
+      auth1,
+      pdf1,
+      reportPdf,
     ],
-    image: jobit,
-    source_code_link: "https://github.com/",
-  },
-  {
-    name: "Trip Guide",
-    description:
-      "A comprehensive travel booking platform that allows users to book flights, hotels, and rental cars, and offers curated recommendations for popular destinations.",
-    tags: [
-      {
-        name: "nextjs",
-        color: "blue-text-gradient",
-      },
-      {
-        name: "supabase",
-        color: "green-text-gradient",
-      },
-      {
-        name: "css",
-        color: "pink-text-gradient",
-      },
-    ],
-    image: tripguide,
-    source_code_link: "https://github.com/",
   },
 ];
 
-export { services, technologies, experiences, testimonials, projects };
+export { services, technologies, experiences, projects };

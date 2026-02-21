@@ -1,6 +1,6 @@
+import creator from "./creator.png";
 import logo from "./logo.svg";
 import backend from "./backend.png";
-import creator from "./creator.png";
 import frontend from "./frontend.png";
 import web from "./web.png";
 import nestjs from "./tech/nestjs.png";
@@ -9,7 +9,6 @@ import linkedin from "./linkedin.png";
 import instagram from "./instagram.png";
 import menu from "./menu.svg";
 import close from "./close.svg";
-
 
 import css from "./tech/css.png";
 import angular from "./tech/angular.png";
@@ -35,18 +34,31 @@ import proxicon from "./company/proxicon.png";
 
 import irontech from "./company/irontech.png";
 
-
-import carrent from "./carrent.png";
-import jobit from "./jobit.png";
-import tripguide from "./tripguide.png";
+// Project gallery images (prject_images folder)
+import cobotList from "./prject_images/cobot_list.png";
+import cobotList2 from "./prject_images/cobot_list2.png";
+import cobotContr from "./prject_images/cobot_contr.png";
+import cobotContr2 from "./prject_images/cobot_contr2.png";
+import cobotMoves from "./prject_images/cobot_moves.png";
+import cobotSim from "./prject_images/cobot_sim.gif";
+import trajCr1 from "./prject_images/traj_cr1.png";
+import trajCr2 from "./prject_images/traj_cr2.png";
+import trajList from "./prject_images/traj_list.png";
+import kpiMon from "./prject_images/kpi_mon.png";
+import kpiMon2 from "./prject_images/kpi_mon2.png";
+import usersManag from "./prject_images/users_manag.png";
+import addUser from "./prject_images/add_user.png";
+import auth1 from "./prject_images/auth1.png";
+import pdf1 from "./prject_images/pdf1.png";
+import reportPdf from "./prject_images/report pdf.png";
 
 export {
   angular,
   python,
+  creator,
   django,
   logo,
   backend,
-  creator,
   frontend,
   web,
   github,
@@ -69,9 +81,23 @@ export {
   threejs,
   enova,
   irontech,
-  carrent,
-  jobit,
-  tripguide,
   nestjs,
   proxicon,
+  // Project gallery
+  cobotList,
+  cobotList2,
+  cobotContr,
+  cobotContr2,
+  cobotMoves,
+  cobotSim,
+  trajCr1,
+  trajCr2,
+  trajList,
+  kpiMon,
+  kpiMon2,
+  usersManag,
+  addUser,
+  auth1,
+  pdf1,
+  reportPdf,
 };
