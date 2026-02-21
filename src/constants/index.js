@@ -264,7 +264,6 @@ const projects = [
       { name: "Tailwind", color: "pink-text-gradient" },
     ],
     image: cobotSim,
-    source_code_link: "https://github.com/",
     gallery: [
       cobotSim,
       cobotList,
