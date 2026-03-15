@@ -16,6 +16,7 @@ import {
   java,
   enova,
   irontech,
+  iron_school,
   logo,
   threejs,
   angular,
@@ -145,17 +146,18 @@ const experiences = [
   {
     title: "Full Stack Developer",
     company_name: "Moonify-Tech",
-    icon: logo,
-    iconBg: "#E6DEDD",
+    icon: iron_school,
+    iconBg: "#383E56",
     date: "01/2026 – Present",
     key_q: "Key Qualifications",
     points: [
       "Developing a payroll management system for Iron School platform, designing and implementing employee contracts, payslip generation, and payment tracking modules with full-stack solutions using Prisma ORM, PostgreSQL, NestJS, React.",
-      "Architected RESTful API endpoints following NestJS best practices with role-based access control (RBAC), and built responsive user interfaces using React and FastAdmin framework for efficient data management and user interaction.",
-      "Conducted thorough E2E testing and integration testing across full stack components to ensure system reliability and data integrity.",
+      "Performed ongoing maintenance, bug fixes, and feature development across a multi-platform monorepo (NestJS backend, React admin panel, React Native mobile app).",
+      "Wroteandmaintained integration and end-to-end tests across full-stack components to ensure system reliability and data integrity.",
+      "Architected RESTful API endpoints following NestJS best practices with role-based access control (RBAC), and built responsive admin interfaces using React.",
     ],
     project_d:
-      "Developing a payroll management system for Iron School platform with employee contracts, payslip generation, and payment tracking using Prisma ORM, PostgreSQL, NestJS, and React, with RESTful APIs, RBAC, and comprehensive E2E and integration testing.",
+      "Iron School streamlines every aspect of school administration. From student management to parent communication, handle it all in one powerful platform.",
   },
   {
     title: "Full Stack",

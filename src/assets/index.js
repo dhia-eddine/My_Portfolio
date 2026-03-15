@@ -33,6 +33,7 @@ import enova from "./company/enova.png";
 import proxicon from "./company/proxicon.png";
 
 import irontech from "./company/irontech.png";
+import iron_school from "./company/iron_school.png";
 
 // Project gallery images (prject_images folder)
 import cobotList2 from "./prject_images/cobot_list2.png";
@@ -80,6 +81,7 @@ export {
   threejs,
   enova,
   irontech,
+  iron_school,
   nestjs,
   proxicon,
   // Project gallery

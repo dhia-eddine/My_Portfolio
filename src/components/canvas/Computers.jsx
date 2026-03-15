@@ -25,19 +25,22 @@ const Computers = ({ isMobile, onLoaded }) => {
   }, [computer, onLoaded]);
   return (
     <group>
-      <hemisphereLight intensity={0.15} groundColor="black" />
-      <pointLight intensity={1} />
+      <ambientLight intensity={0.06} />
+      <hemisphereLight intensity={0.3} groundColor="black" />
+      <directionalLight position={[4, 6, 5]} intensity={0.65} />
       <spotLight
-        position={[-20, 50, 10]}
-        angle={0.12}
-        penumbra={1}
-        intensity={1}
+        position={[-8, 10, 6]}
+        angle={0.24}
+        penumbra={0.9}
+        intensity={0.65}
+        distance={70}
+        decay={1.6}
         castShadow
         shadow-mapSize={[1024, 1024]}
       />
       <primitive
         object={computer.scene}
-        scale={isMobile ? 0.68 : 0.8}
+        scale={isMobile ? 0.75 : 0.8}
         position={isMobile ? [0, -1.92, 0] : [0.8, -3.35, 0]}
         rotation={[-0.01, Math.PI, -0.1]}
       />

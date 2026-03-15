@@ -44,10 +44,7 @@ const About = () => {
         <h2 className={styles.sectionHeadText}>Overview.</h2>
       </motion.div>
 
-      <motion.div
-        variants={fadeIn("", "", 0.1, 1)}
-        className="mt-6 grid md:grid-cols-2 gap-8 items-start"
-      >
+      <motion.div variants={fadeIn("", "", 0.1, 1)} className="mt-6">
         <p className="text-secondary text-[17px] leading-[32px]">
           I am a highly skilled software developer proficient in{" "}
           <span className="text-white font-medium">
@@ -61,33 +58,6 @@ const About = () => {
           closely with clients to develop efficient, scalable, and user-friendly
           solutions that solve real-world challenges.
         </p>
-
-        <div className="flex flex-col gap-4">
-          {[
-            { label: "Frontend", value: 90, color: "#915eff" },
-            { label: "Backend", value: 85, color: "#2563eb" },
-            { label: "DevOps / Tools", value: 70, color: "#00cea8" },
-          ].map(({ label, value, color }) => (
-            <div key={label}>
-              <div className="flex justify-between mb-1">
-                <span className="text-white/80 text-sm font-medium">
-                  {label}
-                </span>
-                <span className="text-secondary text-sm">{value}%</span>
-              </div>
-              <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${value}%` }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  viewport={{ once: true }}
-                  className="h-full rounded-full"
-                  style={{ background: color }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
       </motion.div>
 
       <div className="mt-16 flex flex-wrap gap-8 justify-center">
