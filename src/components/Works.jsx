@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types -- project shape from constants */
+/* eslint-disable react-refresh/only-export-components -- Works + ProjectCard in same file */
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Tilt } from "react-tilt";

@@ -67,7 +67,7 @@ const Hero = () => {
   }, [loaded]);
 
   return (
-    <section className="relative w-full h-screen mx-auto bg-primary overflow-hidden">
+    <section className="relative w-full h-screen mx-auto overflow-hidden">
       {/* Background radial glow */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#915eff]/10 rounded-full blur-3xl" />

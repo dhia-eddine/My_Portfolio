@@ -41,7 +41,7 @@ const ScrollToHash = () => {
 const HomePage = () => (
   <>
     <ScrollToHash />
-    <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
+    <div>
       <Navbar />
       <Hero />
     </div>
@@ -61,7 +61,7 @@ const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
 const App = () => {
   return (
     <BrowserRouter basename={basename}>
-      <div className="relative z-0 bg-primary">
+      <div className="relative z-0">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
