@@ -35,7 +35,6 @@ import proxicon from "./company/proxicon.png";
 import irontech from "./company/irontech.png";
 
 // Project gallery images (prject_images folder)
-import cobotList from "./prject_images/cobot_list.png";
 import cobotList2 from "./prject_images/cobot_list2.png";
 import cobotContr from "./prject_images/cobot_contr.png";
 import cobotContr2 from "./prject_images/cobot_contr2.png";
@@ -84,7 +83,6 @@ export {
   nestjs,
   proxicon,
   // Project gallery
-  cobotList,
   cobotList2,
   cobotContr,
   cobotContr2,

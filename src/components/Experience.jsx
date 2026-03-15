@@ -8,61 +8,93 @@ import { styles } from "../styles";
 import { experiences } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { textVariant } from "../utils/motion";
+
 const ExperienceCard = ({ experience }) => (
   <VerticalTimelineElement
     contentStyle={{
-      background: "#1d1836",
+      background: "linear-gradient(135deg, #12103a 0%, #0e0c2a 100%)",
       color: "#fff",
+      border: "1px solid rgba(145,94,255,0.15)",
+      borderRadius: "16px",
+      boxShadow: "0 4px 30px rgba(0,0,0,0.4)",
     }}
-    contentArrowStyle={{ borderRight: "7px solid #232631" }}
-    date={experience.date}
-    iconStyle={{ background: experience.iconBg }}
+    contentArrowStyle={{ borderRight: "7px solid rgba(145,94,255,0.3)" }}
+    date={
+      <span className="text-[#915eff] font-semibold text-sm tracking-wide">
+        {experience.date}
+      </span>
+    }
+    iconStyle={{
+      background: experience.iconBg,
+      boxShadow: "0 0 0 4px #915eff33, 0 0 20px rgba(145,94,255,0.2)",
+    }}
     icon={
       <div className="flex justify-center items-center w-full h-full">
         <img
           src={experience.icon}
           alt={experience.company_name}
-          className="w-[80%] h-[80%] object-contain"
+          className="w-[75%] h-[75%] object-contain"
         />
       </div>
     }
   >
-    <div>
-      <h3 className="text-white text-[24px] font-bold">{experience.title}</h3>
+    <div className="mb-4">
+      <h3 className="text-white text-[22px] font-bold leading-tight">
+        {experience.title}
+      </h3>
       <p
-        className="text-secondary tet-[16px] font-semibold"
-        style={{ margin: 0 }}
+        className="text-[#915eff] text-[15px] font-semibold mt-1"
+        style={{ margin: "4px 0 0" }}
       >
         {experience.company_name}
       </p>
     </div>
-    <ul className="mt-5 list-disc ml-5 space-y-2">
+
+    <div className="h-px bg-gradient-to-r from-[#915eff]/30 to-transparent mb-4" />
+
+    <p className="text-[#aaa6c3] text-[13px] font-semibold uppercase tracking-wider mb-3">
+      {experience.key_q}
+    </p>
+
+    <ul className="space-y-2">
       {experience.points.map((point, index) => (
         <li
           key={`experience-point-${index}`}
-          className="text-white-100 text-[14px] pl-1 tracking-wider"
+          className="text-white/80 text-[14px] leading-relaxed flex gap-2"
         >
-          {point}
+          <span className="text-[#915eff] mt-1 shrink-0">▸</span>
+          <span>{point}</span>
         </li>
       ))}
     </ul>
-    <br />
-    <h3 className="text-white text-[16px] font-bold"> Project description</h3>
-    <br />
-    <div className="text-white-100 text-[14px] tracking-wider ">
-      {experience.project_d}
-    </div>
+
+    {experience.project_d && (
+      <div className="mt-5 p-4 rounded-xl bg-white/3 border border-white/5">
+        <p className="text-[#915eff] text-[12px] font-semibold uppercase tracking-wider mb-2">
+          Project Summary
+        </p>
+        <p className="text-white/70 text-[13px] leading-relaxed">
+          {experience.project_d}
+        </p>
+      </div>
+    )}
   </VerticalTimelineElement>
 );
+
 const Experience = () => {
   return (
     <>
-      <motion.div variants={textVariant()}>
+      <motion.div
+        variants={textVariant()}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
         <p className={styles.sectionSubText}>What I have done so far</p>
         <h2 className={styles.sectionHeadText}>Work Experience.</h2>
       </motion.div>
       <div className="mt-20 flex flex-col">
-        <VerticalTimeline>
+        <VerticalTimeline lineColor="rgba(145,94,255,0.2)">
           {experiences.map((experience, index) => (
             <ExperienceCard key={index} experience={experience} />
           ))}

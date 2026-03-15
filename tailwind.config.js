@@ -13,13 +13,17 @@ module.exports = {
         "white-100": "#f3f3f3",
       },
       boxShadow: {
-        card: "0px 35px 120px -15px #211e35",
+        card: "0px 20px 80px -10px rgba(0,0,0,0.6)",
+        "glow-violet": "0 0 30px rgba(145,94,255,0.3)",
       },
       screens: {
         xs: "450px",
       },
       backgroundImage: {
         "hero-pattern": "url('/src/assets/herobg.png')",
+      },
+      backdropBlur: {
+        xs: "2px",
       },
     },
   },

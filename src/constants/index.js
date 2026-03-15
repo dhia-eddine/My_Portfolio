@@ -23,7 +23,6 @@ import {
   python,
   nestjs,
   proxicon,
-  cobotList,
   cobotList2,
   cobotContr,
   cobotContr2,
@@ -266,7 +265,6 @@ const projects = [
     image: cobotSim,
     gallery: [
       cobotSim,
-      cobotList,
       cobotList2,
       cobotContr,
       cobotContr2,
