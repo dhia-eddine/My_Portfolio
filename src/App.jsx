@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import {
   About,
   Contact,
@@ -16,9 +22,17 @@ import {
 const ScrollToHash = () => {
   const { pathname, hash } = useLocation();
   useEffect(() => {
-    if (pathname === "/" && hash === "#work") {
-      const el = document.getElementById("work");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (pathname === "/" && hash) {
+      const id = hash.replace("#", "");
+      const tryScroll = (attempts = 0) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else if (attempts < 10) {
+          setTimeout(() => tryScroll(attempts + 1), 100);
+        }
+      };
+      tryScroll();
     }
   }, [pathname, hash]);
   return null;
@@ -27,7 +41,7 @@ const ScrollToHash = () => {
 const HomePage = () => (
   <>
     <ScrollToHash />
-    <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
+    <div>
       <Navbar />
       <Hero />
     </div>
@@ -47,7 +61,7 @@ const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
 const App = () => {
   return (
     <BrowserRouter basename={basename}>
-      <div className="relative z-0 bg-primary">
+      <div className="relative z-0">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route
@@ -59,6 +73,7 @@ const App = () => {
               </>
             }
           />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </BrowserRouter>
