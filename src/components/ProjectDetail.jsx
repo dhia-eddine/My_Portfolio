@@ -62,7 +62,7 @@ const ProjectDetail = () => {
             className="absolute top-24 left-6 sm:left-16"
           >
             <Link
-              to="/#work"
+              to={{ pathname: "/", hash: "#work" }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 text-white/80 hover:text-white hover:bg-black/60 hover:border-[#915eff]/40 transition-all duration-300 text-sm font-medium"
             >
               <svg
@@ -249,7 +249,7 @@ const ProjectDetail = () => {
             className="mt-16 pt-8 border-t border-white/5 flex justify-between items-center flex-wrap gap-4"
           >
             <Link
-              to="/#work"
+              to={{ pathname: "/", hash: "#work" }}
               className="inline-flex items-center gap-2 text-secondary hover:text-white transition-colors text-sm font-medium"
             >
               <svg
@@ -267,7 +267,7 @@ const ProjectDetail = () => {
               Back to all projects
             </Link>
             <Link
-              to="/#contact"
+              to={{ pathname: "/", hash: "#contact" }}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 hover:scale-105"
               style={{
                 background: "linear-gradient(135deg, #915eff, #2563eb)",

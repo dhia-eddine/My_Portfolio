@@ -77,7 +77,7 @@ const Navbar = () => {
       const el = document.getElementById(link.id);
       if (el) el.scrollIntoView({ behavior: "smooth" });
     } else {
-      navigate(`/#${link.id}`);
+      navigate({ pathname: "/", hash: `#${link.id}` });
     }
   };
 
