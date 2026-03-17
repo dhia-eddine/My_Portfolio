@@ -24,6 +24,27 @@ import {
   python,
   nestjs,
   proxicon,
+  ironSchoolOg,
+  ironSchoolIntro,
+  ironSchoolAdmin1,
+  ironSchoolAdmin2,
+  ironSchoolAdmin3,
+  ironSchoolAdmin4,
+  ironSchoolAdmin5,
+  ironSchoolAdmin6,
+  ironSchoolAdmin7,
+  ironSchoolAdmin8,
+  ironSchoolMobile1,
+  ironSchoolMobile2,
+  ironSchoolMobile3,
+  ironSchoolMobile4,
+  ironSchoolMobile5,
+  ironSchoolMobile6,
+  ironSchoolMobile7,
+  ironSchoolMobile8,
+  ironSchoolMobile9,
+  ironSchoolMobile10,
+  ironSchoolMobile11,
   cobotList2,
   cobotContr,
   cobotContr2,
@@ -39,12 +60,17 @@ import {
   auth1,
   pdf1,
   reportPdf,
+  nx,
 } from "../assets";
 
 export const navLinks = [
   {
     id: "about",
     title: "About",
+  },
+  {
+    id: "Experience",
+    title: "Experience",
   },
   {
     id: "work",
@@ -85,33 +111,40 @@ const technologies = [
     icon: django,
   },
   {
-    name: "HTML 5",
-    icon: html,
+    name: "Tailwind CSS",
+    icon: tailwind,
   },
+
   {
-    name: "CSS 3",
-    icon: css,
-  },
-  {
-    name: "JavaScript",
-    icon: javascript,
+    name: "React JS",
+    icon: reactjs,
   },
   {
     name: "TypeScript",
     icon: typescript,
   },
   {
-    name: "React JS",
-    icon: reactjs,
+    name: "Three JS",
+    icon: threejs,
   },
+  {
+    name: "JavaScript",
+    icon: javascript,
+  },
+  {
+    name: "CSS 3",
+    icon: css,
+  },
+
   {
     name: "sql",
     icon: sql,
   },
   {
-    name: "Tailwind CSS",
-    icon: tailwind,
+    name: "NX Monorepos",
+    icon: nx,
   },
+
   {
     name: "Node JS",
     icon: nodejs,
@@ -120,17 +153,10 @@ const technologies = [
     name: "MongoDB",
     icon: mongodb,
   },
-  {
-    name: "Three JS",
-    icon: threejs,
-  },
+
   {
     name: "git",
     icon: git,
-  },
-  {
-    name: "adobexd",
-    icon: adobexd,
   },
   {
     name: "java",
@@ -139,6 +165,10 @@ const technologies = [
   {
     name: "python",
     icon: python,
+  },
+  {
+    name: "HTML 5",
+    icon: html,
   },
 ];
 
@@ -252,6 +282,45 @@ const experiences = [
 ];
 
 const projects = [
+  {
+    id: "iron-school",
+    name: "Iron School – School Management Platform",
+    description:
+      "Iron School streamlines every aspect of school administration — from student management and parent communication to payroll, employee contracts, and payment tracking — all in one powerful platform. Built with NestJS, PostgreSQL, Prisma ORM, React, and React Native.",
+    tags: [
+      { name: "NestJS", color: "green-text-gradient" },
+      { name: "React", color: "blue-text-gradient" },
+      { name: "React Native", color: "blue-text-gradient" },
+      { name: "PostgreSQL", color: "pink-text-gradient" },
+      { name: "Prisma", color: "pink-text-gradient" },
+    ],
+    image: ironSchoolAdmin1,
+    gallery: [
+      ironSchoolIntro,
+      ironSchoolOg,
+      ironSchoolAdmin1,
+      ironSchoolAdmin2,
+      ironSchoolAdmin3,
+      ironSchoolAdmin4,
+      ironSchoolAdmin5,
+      ironSchoolAdmin6,
+      ironSchoolAdmin7,
+      ironSchoolAdmin8,
+      ironSchoolMobile1,
+      ironSchoolMobile2,
+      ironSchoolMobile3,
+      ironSchoolMobile4,
+      ironSchoolMobile5,
+      ironSchoolMobile6,
+      ironSchoolMobile7,
+      ironSchoolMobile8,
+      ironSchoolMobile9,
+      ironSchoolMobile10,
+      ironSchoolMobile11,
+    ],
+    source_code_link: "https://iron-school.com/en",
+    link_label: "Visit Website",
+  },
   {
     id: "enova-robotics-cobot",
     name: "Enova Robotics – UR10e Cobot Control",

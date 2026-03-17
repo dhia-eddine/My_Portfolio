@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projects } from "../constants";
-import { fadeIn, zoomIn, staggerContainer } from "../utils/motion";
+import { fadeIn, staggerContainer } from "../utils/motion";
 import { github } from "../assets";
 
 const ProjectDetail = () => {
@@ -10,12 +10,16 @@ const ProjectDetail = () => {
   const project = projects.find((p) => p.id === id);
   const [lightbox, setLightbox] = useState(null);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [id]);
+
   if (!project) {
     return (
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="min-h-screen bg-primary flex items-center justify-center"
+        className="min-h-screen flex items-center justify-center"
       >
         <div className="text-center">
           <p className="text-secondary text-xl mb-4">Project not found.</p>
@@ -37,7 +41,7 @@ const ProjectDetail = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="min-h-screen bg-primary"
+        className="min-h-screen"
       >
         {/* ── Hero banner ── */}
         <div className="relative w-full h-[55vh] min-h-[320px] max-h-[480px] overflow-hidden">
@@ -116,8 +120,22 @@ const ProjectDetail = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:border-[#915eff]/50 hover:bg-[#915eff]/10 transition-all duration-300 text-white text-sm font-medium"
               >
-                <img src={github} alt="GitHub" className="w-5 h-5" />
-                View source
+                {project.link_label ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12 15.3 15.3 0 0 1 12 2z" />
+                  </svg>
+                ) : (
+                  <img src={github} alt="GitHub" className="w-5 h-5" />
+                )}
+                {project.link_label ?? "View source"}
               </a>
             )}
             <div className="flex flex-wrap gap-2">
@@ -288,13 +306,13 @@ const ProjectDetail = () => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="relative max-w-5xl w-full"
+                className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
               >
                 <img
                   src={project.gallery[lightbox]}
                   alt={`Screenshot ${lightbox + 1}`}
-                  className="w-full rounded-2xl shadow-2xl"
+                  className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-2xl shadow-2xl"
                 />
                 {/* Close */}
                 <button

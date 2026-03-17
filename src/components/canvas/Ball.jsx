@@ -19,18 +19,19 @@ export const Ball = (props) => {
       <directionalLight position={[0, 0, 0.05]} />
       <mesh castShadow receiveShadow scale={2.75}>
         <icosahedronGeometry args={[1, 3]} />
-        <meshStandardMaterial color={"#fff8eb"}></meshStandardMaterial>
+        <meshStandardMaterial
+          //color={"#fff8eb"}
+          color={"#bb9dfa"}
+          transparent
+          opacity={0.4}
+        ></meshStandardMaterial>
         <Decal
           position={[0, 0, 1]}
           rotation={[2 * Math.PI, 0, 6.25]}
           map={decal}
         />
         {/*front*/}
-        <Decal
-          position={[0, 0, -1.1]}
-          rotation={[0, 3, 6.25]}
-          map={decal}
-        />
+        <Decal position={[0, 0, -1.1]} rotation={[0, 3, 6.25]} map={decal} />
         {/*back*/}
         <Decal position={[0, 1, 0]} rotation={[1.5, 3, 3]} map={decal} />
         {/*top*/}
@@ -38,11 +39,7 @@ export const Ball = (props) => {
         {/*bottom*/}
         <Decal position={[0.6, 0, 0]} rotation={[0, 1, 6.25]} map={decal} />
         {/*right*/}
-        <Decal
-          position={[-0.6, 0, 0]}
-          rotation={[0, 5, 6.25]}
-          map={decal}
-        />
+        <Decal position={[-0.6, 0, 0]} rotation={[0, 5, 6.25]} map={decal} />
         {/*left*/}
       </mesh>
     </Float>

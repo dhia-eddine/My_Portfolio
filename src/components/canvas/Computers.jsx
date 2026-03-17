@@ -20,23 +20,37 @@ if (typeof window !== "undefined" && gltfUrl.startsWith("http")) {
 
 const Computers = ({ isMobile, onLoaded }) => {
   const computer = useGLTF(gltfUrl);
+
   useEffect(() => {
     onLoaded?.();
   }, [computer, onLoaded]);
+
   return (
     <group>
-      <ambientLight intensity={0.06} />
-      <hemisphereLight intensity={0.3} groundColor="black" />
-      <directionalLight position={[4, 6, 5]} intensity={0.65} />
+      <ambientLight intensity={0.08} />
+      <hemisphereLight intensity={0.28} groundColor="black" />
+      <directionalLight position={[4, 6, 5]} intensity={0.62} />
       <spotLight
         position={[-8, 10, 6]}
         angle={0.24}
         penumbra={0.9}
-        intensity={0.65}
+        intensity={0.62}
         distance={70}
         decay={1.6}
         castShadow
         shadow-mapSize={[1024, 1024]}
+      />
+      <directionalLight
+        position={[7, 1.4, 2.2]}
+        intensity={0.05}
+        color="#7a5cff"
+      />
+      <pointLight
+        position={[5.4, 1, 2.1]}
+        intensity={0.5}
+        distance={8}
+        decay={2}
+        color="#915eff"
       />
       <primitive
         object={computer.scene}

@@ -7,30 +7,58 @@ import ErrorBoundary from "./ErrorBoundary";
 import { textVariant } from "../utils/motion";
 import { styles } from "../styles";
 
-const ITEM_SIZE = 112;
-const GAP = 32;
+const StaticTechIcon = ({ icon, name }) => {
+  const [hasError, setHasError] = useState(!icon);
+  const shortName = name.slice(0, 2).toUpperCase();
+
+  return (
+    <div className="w-full h-full flex items-center justify-center rounded-full bg-white/5 border border-white/10 group-hover:border-[#915eff]/40 group-hover:bg-[#915eff]/5 transition-all duration-300 overflow-hidden">
+      {hasError ? (
+        <span className="text-white/70 text-base sm:text-lg font-semibold tracking-wide">
+          {shortName}
+        </span>
+      ) : (
+        <img
+          src={icon}
+          alt={name}
+          onError={() => setHasError(true)}
+          className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
+        />
+      )}
+    </div>
+  );
+};
 
 const Tech = () => {
   const containerRef = useRef(null);
-  const [firstRowCount, setFirstRowCount] = useState(7);
+  const itemRefs = useRef([]);
+  const [firstRowCount, setFirstRowCount] = useState(1);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
     const updateCount = () => {
-      const width = el.offsetWidth;
-      const isMobile = width < 640;
-      const itemSize = isMobile ? 80 : ITEM_SIZE;
-      const gap = isMobile ? 24 : GAP;
-      const count = Math.min(
-        technologies.length,
-        Math.max(1, Math.floor((width + gap) / (itemSize + gap))),
-      );
-      setFirstRowCount(count);
+      requestAnimationFrame(() => {
+        const nodes = itemRefs.current.filter(Boolean);
+        if (!nodes.length) return;
+
+        const firstRowTop = nodes[0].offsetTop;
+        let count = 0;
+
+        for (const node of nodes) {
+          if (node.offsetTop !== firstRowTop) break;
+          count += 1;
+        }
+
+        setFirstRowCount(Math.max(1, count));
+      });
     };
+
     updateCount();
     const observer = new ResizeObserver(updateCount);
     observer.observe(el);
+
     return () => observer.disconnect();
   }, []);
 
@@ -53,6 +81,9 @@ const Tech = () => {
         {technologies.map((technology, index) => (
           <motion.div
             key={technology.name}
+            ref={(node) => {
+              itemRefs.current[index] = node;
+            }}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: index * 0.04 }}
@@ -62,25 +93,19 @@ const Tech = () => {
             <div className="w-20 h-20 sm:w-28 sm:h-28 relative">
               <ErrorBoundary
                 fallback={
-                  <div className="w-full h-full flex items-center justify-center rounded-full bg-white/5 border border-white/10 group-hover:border-[#915eff]/40 group-hover:bg-[#915eff]/5 transition-all duration-300 overflow-hidden">
-                    <img
-                      src={technology.icon}
-                      alt={technology.name}
-                      className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-                    />
-                  </div>
+                  <StaticTechIcon
+                    icon={technology.icon}
+                    name={technology.name}
+                  />
                 }
               >
                 {index < firstRowCount ? (
                   <BallCanvas icon={technology.icon} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center rounded-full bg-white/5 border border-white/10 group-hover:border-[#915eff]/40 group-hover:bg-[#915eff]/5 transition-all duration-300 overflow-hidden">
-                    <img
-                      src={technology.icon}
-                      alt={technology.name}
-                      className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-                    />
-                  </div>
+                  <StaticTechIcon
+                    icon={technology.icon}
+                    name={technology.name}
+                  />
                 )}
               </ErrorBoundary>
             </div>

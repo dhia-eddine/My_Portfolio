@@ -32,10 +32,10 @@ function useTypewriter(words, speed = 80, pause = 1800) {
           setText(
             deleting
               ? current.slice(0, text.length - 1)
-              : current.slice(0, text.length + 1),
+              : current.slice(0, text.length + 1)
           );
         },
-        deleting ? speed / 2 : speed,
+        deleting ? speed / 2 : speed
       );
     }
     return () => clearTimeout(timeout);
@@ -82,7 +82,13 @@ const Hero = () => {
           <div className="relative w-5 h-5">
             <div className="w-5 h-5 rounded-full bg-[#915eff] pulse-ring" />
           </div>
-          <div className="w-1 sm:h-80 h-40 violet-gradient opacity-80" />
+          <div
+            className="w-1 sm:h-80 h-40"
+            style={{
+              background:
+                "linear-gradient(to bottom, #915eff 0%, transparent 100%)",
+            }}
+          />{" "}
         </div>
 
         <div className="mt-2">

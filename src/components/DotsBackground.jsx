@@ -47,7 +47,7 @@ const DotsBackground = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       dots = Array.from({ length: CONFIG.dotCount }, () =>
-        createDot(canvas.width, canvas.height)
+        createDot(canvas.width, canvas.height),
       );
     };
 
