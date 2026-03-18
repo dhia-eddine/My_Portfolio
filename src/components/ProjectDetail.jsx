@@ -364,46 +364,58 @@ const ProjectDetail = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-50 bg-black/92 backdrop-blur-md flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
               onClick={() => setLightbox(null)}
               onTouchStart={onTouchStart}
               onTouchEnd={onTouchEnd}
             >
-              <motion.div
-                initial={{
-                  scale: 0.9,
-                  opacity: 0,
-                  x: slideDirection > 0 ? 100 : -100,
-                }}
-                animate={{
-                  scale: 1,
-                  opacity: 1,
-                  x: 0,
-                }}
-                exit={{
-                  scale: 0.9,
-                  opacity: 0,
-                  x: slideDirection > 0 ? -100 : 100,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                  duration: 0.3,
-                }}
-                className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center"
+              <div
+                className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                <motion.img
-                  key={lightbox}
-                  src={project.gallery[lightbox]}
-                  alt={`Screenshot ${lightbox + 1}`}
-                  className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-2xl shadow-2xl"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                />
+                <AnimatePresence
+                  initial={false}
+                  custom={slideDirection}
+                  mode="popLayout"
+                >
+                  <motion.img
+                    key={lightbox}
+                    custom={slideDirection}
+                    src={project.gallery[lightbox]}
+                    alt={`Screenshot ${lightbox + 1}`}
+                    className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-2xl shadow-2xl"
+                    variants={{
+                      enter: (dir) => ({
+                        x: dir >= 0 ? "60%" : "-60%",
+                        opacity: 0,
+                        scale: 0.88,
+                        rotateY: dir >= 0 ? 12 : -12,
+                      }),
+                      center: {
+                        x: 0,
+                        opacity: 1,
+                        scale: 1,
+                        rotateY: 0,
+                      },
+                      exit: (dir) => ({
+                        x: dir >= 0 ? "-60%" : "60%",
+                        opacity: 0,
+                        scale: 0.88,
+                        rotateY: dir >= 0 ? -12 : 12,
+                      }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 320, damping: 32 },
+                      opacity: { duration: 0.22 },
+                      scale: { duration: 0.22 },
+                      rotateY: { duration: 0.28 },
+                    }}
+                  />
+                </AnimatePresence>
                 {/* Close */}
                 <motion.button
                   onClick={() => setLightbox(null)}
@@ -486,7 +498,7 @@ const ProjectDetail = () => {
                   <div className="sm:hidden">Swipe to navigate</div>
                   <div className="hidden sm:block">← → or click arrows</div>
                 </motion.div>
-              </motion.div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
