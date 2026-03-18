@@ -297,7 +297,6 @@ const projects = [
     image: ironSchoolAdmin1,
     gallery: [
       ironSchoolIntro,
-      ironSchoolOg,
       ironSchoolAdmin1,
       ironSchoolAdmin2,
       ironSchoolAdmin3,

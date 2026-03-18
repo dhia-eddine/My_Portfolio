@@ -39,16 +39,50 @@ const DotsBackground = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
+    const isLikelyTouchDevice = window.matchMedia("(hover: none)").matches;
     let animId;
     let mouse = { x: null, y: null };
     let dots = [];
+    let viewport = { width: 0, height: 0 };
+    let lastViewport = { width: 0, height: 0 };
 
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      dots = Array.from({ length: CONFIG.dotCount }, () =>
-        createDot(canvas.width, canvas.height),
-      );
+    const resize = ({ force = false } = {}) => {
+      const nextWidth = window.innerWidth;
+      const nextHeight = window.innerHeight;
+
+      const isMinorMobileHeightChange =
+        isLikelyTouchDevice &&
+        !force &&
+        lastViewport.width === nextWidth &&
+        lastViewport.height > 0 &&
+        Math.abs(nextHeight - lastViewport.height) < 80;
+
+      // Ignore tiny mobile viewport height fluctuations caused by browser chrome while scrolling.
+      if (isMinorMobileHeightChange) return;
+
+      const prevWidth = viewport.width || nextWidth;
+      const prevHeight = viewport.height || nextHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      viewport = { width: nextWidth, height: nextHeight };
+      lastViewport = { width: nextWidth, height: nextHeight };
+
+      canvas.width = Math.floor(nextWidth * dpr);
+      canvas.height = Math.floor(nextHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (dots.length === 0) {
+        dots = Array.from({ length: CONFIG.dotCount }, () =>
+          createDot(viewport.width, viewport.height),
+        );
+        return;
+      }
+
+      dots = dots.map((dot) => ({
+        ...dot,
+        x: (dot.x / prevWidth) * viewport.width,
+        y: (dot.y / prevHeight) * viewport.height,
+      }));
     };
 
     const onMouseMove = (e) => {
@@ -61,8 +95,10 @@ const DotsBackground = () => {
       mouse.y = null;
     };
 
+    const onOrientationChange = () => resize({ force: true });
+
     const draw = () => {
-      const { width, height } = canvas;
+      const { width, height } = viewport;
       ctx.fillStyle = "#050816";
       ctx.fillRect(0, 0, width, height);
 
@@ -104,6 +140,7 @@ const DotsBackground = () => {
           const dx = d.x - mouse.x;
           const dy = d.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+          const safeDist = Math.max(dist, 0.001);
 
           if (dist < CONFIG.mouseRadius) {
             const linealpha = 0.5 * (1 - dist / CONFIG.mouseRadius);
@@ -115,8 +152,8 @@ const DotsBackground = () => {
             ctx.stroke();
 
             const force = (CONFIG.mouseRadius - dist) / CONFIG.mouseRadius;
-            d.vx += (dx / dist) * force * 0.08;
-            d.vy += (dy / dist) * force * 0.08;
+            d.vx += (dx / safeDist) * force * 0.08;
+            d.vy += (dy / safeDist) * force * 0.08;
 
             const speed = Math.sqrt(d.vx * d.vx + d.vy * d.vy);
             if (speed > CONFIG.speed * 3) {
@@ -139,6 +176,7 @@ const DotsBackground = () => {
 
     resize();
     window.addEventListener("resize", resize);
+    window.addEventListener("orientationchange", onOrientationChange);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseleave", onMouseLeave);
     draw();
@@ -146,6 +184,7 @@ const DotsBackground = () => {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("orientationchange", onOrientationChange);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseleave", onMouseLeave);
     };

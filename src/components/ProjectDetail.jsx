@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projects } from "../constants";
 import { fadeIn, staggerContainer } from "../utils/motion";
@@ -9,11 +9,50 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const project = projects.find((p) => p.id === id);
   const [lightbox, setLightbox] = useState(null);
+  const touchStartRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [id]);
+    if (project) {
+      document.title = `${project.name} | Dhia Eddine Mandhouj Portfolio`;
+    }
+  }, [id, project]);
 
+  const goPrev = () => {
+    setLightbox((current) =>
+      current !== null && current > 0 ? current - 1 : current,
+    );
+  };
+
+  const goNext = () => {
+    if (!project) return;
+    setLightbox((current) =>
+      current !== null && current < project.gallery.length - 1
+        ? current + 1
+        : current,
+    );
+  };
+
+  const onTouchStart = (event) => {
+    const touch = event.changedTouches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const onTouchEnd = (event) => {
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
+    const threshold = 40;
+
+    if (!isHorizontalSwipe || Math.abs(deltaX) < threshold) return;
+
+    if (deltaX > 0) {
+      goPrev();
+    } else {
+      goNext();
+    }
+  };
   if (!project) {
     return (
       <motion.div
@@ -308,6 +347,8 @@ const ProjectDetail = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
               >
                 <img
                   src={project.gallery[lightbox]}
@@ -335,7 +376,7 @@ const ProjectDetail = () => {
                 {/* Prev / Next */}
                 {lightbox > 0 && (
                   <button
-                    onClick={() => setLightbox(lightbox - 1)}
+                    onClick={goPrev}
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                   >
                     <svg
@@ -354,7 +395,7 @@ const ProjectDetail = () => {
                 )}
                 {lightbox < project.gallery.length - 1 && (
                   <button
-                    onClick={() => setLightbox(lightbox + 1)}
+                    onClick={goNext}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
                   >
                     <svg
@@ -374,6 +415,9 @@ const ProjectDetail = () => {
                 {/* Counter */}
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white/70 text-xs font-medium">
                   {lightbox + 1} / {project.gallery.length}
+                </div>
+                <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white/60 text-[11px] font-medium sm:hidden">
+                  Swipe to navigate
                 </div>
               </motion.div>
             </motion.div>

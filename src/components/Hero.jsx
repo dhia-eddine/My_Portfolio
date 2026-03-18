@@ -32,10 +32,10 @@ function useTypewriter(words, speed = 80, pause = 1800) {
           setText(
             deleting
               ? current.slice(0, text.length - 1)
-              : current.slice(0, text.length + 1)
+              : current.slice(0, text.length + 1),
           );
         },
-        deleting ? speed / 2 : speed
+        deleting ? speed / 2 : speed,
       );
     }
     return () => clearTimeout(timeout);

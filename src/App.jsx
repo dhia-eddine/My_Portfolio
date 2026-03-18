@@ -38,22 +38,28 @@ const ScrollToHash = () => {
   return null;
 };
 
-const HomePage = () => (
-  <>
-    <ScrollToHash />
-    <div>
-      <Navbar />
-      <Hero />
-    </div>
-    <About />
-    <Experience />
-    <Tech />
-    <Works />
-    <div className="relative z-0">
-      <Contact />
-    </div>
-  </>
-);
+const HomePage = () => {
+  useEffect(() => {
+    document.title = "Dhia Eddine Mandhouj | Full Stack Developer";
+  }, []);
+
+  return (
+    <>
+      <ScrollToHash />
+      <div>
+        <Navbar />
+        <Hero />
+      </div>
+      <About />
+      <Experience />
+      <Tech />
+      <Works />
+      <div className="relative z-0">
+        <Contact />
+      </div>
+    </>
+  );
+};
 
 // Match Vite base (e.g. "/My_Portfolio/") so routes work when app is served from a subpath
 const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
