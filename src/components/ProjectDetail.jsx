@@ -9,7 +9,9 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const project = projects.find((p) => p.id === id);
   const [lightbox, setLightbox] = useState(null);
+  const [slideDirection, setSlideDirection] = useState(0); // -1: prev, 1: next
   const touchStartRef = useRef({ x: 0, y: 0 });
+  const lightboxRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -19,6 +21,7 @@ const ProjectDetail = () => {
   }, [id, project]);
 
   const goPrev = () => {
+    setSlideDirection(-1);
     setLightbox((current) =>
       current !== null && current > 0 ? current - 1 : current,
     );
@@ -26,6 +29,7 @@ const ProjectDetail = () => {
 
   const goNext = () => {
     if (!project) return;
+    setSlideDirection(1);
     setLightbox((current) =>
       current !== null && current < project.gallery.length - 1
         ? current + 1
@@ -53,6 +57,28 @@ const ProjectDetail = () => {
       goNext();
     }
   };
+
+  // Keyboard navigation for desktop
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (lightbox === null) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setLightbox(null);
+      }
+    };
+
+    if (lightbox !== null) {
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [lightbox, project]);
   if (!project) {
     return (
       <motion.div
@@ -331,34 +357,59 @@ const ProjectDetail = () => {
         </div>
 
         {/* ── Lightbox ── */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {lightbox !== null && (
             <motion.div
+              ref={lightboxRef}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
               onClick={() => setLightbox(null)}
+              onTouchStart={onTouchStart}
+              onTouchEnd={onTouchEnd}
             >
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                initial={{
+                  scale: 0.9,
+                  opacity: 0,
+                  x: slideDirection > 0 ? 100 : -100,
+                }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                  x: 0,
+                }}
+                exit={{
+                  scale: 0.9,
+                  opacity: 0,
+                  x: slideDirection > 0 ? -100 : 100,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30,
+                  duration: 0.3,
+                }}
                 className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
-                onTouchStart={onTouchStart}
-                onTouchEnd={onTouchEnd}
               >
-                <img
+                <motion.img
+                  key={lightbox}
                   src={project.gallery[lightbox]}
                   alt={`Screenshot ${lightbox + 1}`}
                   className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-2xl shadow-2xl"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
                 />
                 {/* Close */}
-                <button
+                <motion.button
                   onClick={() => setLightbox(null)}
                   className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <svg
                     width="16"
@@ -372,12 +423,14 @@ const ProjectDetail = () => {
                   >
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
-                </button>
+                </motion.button>
                 {/* Prev / Next */}
                 {lightbox > 0 && (
-                  <button
+                  <motion.button
                     onClick={goPrev}
                     className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    whileHover={{ scale: 1.15, x: -4 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <svg
                       width="18"
@@ -391,12 +444,14 @@ const ProjectDetail = () => {
                     >
                       <path d="M15 18l-6-6 6-6" />
                     </svg>
-                  </button>
+                  </motion.button>
                 )}
                 {lightbox < project.gallery.length - 1 && (
-                  <button
+                  <motion.button
                     onClick={goNext}
                     className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                    whileHover={{ scale: 1.15, x: 4 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <svg
                       width="18"
@@ -410,15 +465,27 @@ const ProjectDetail = () => {
                     >
                       <path d="M9 18l6-6-6-6" />
                     </svg>
-                  </button>
+                  </motion.button>
                 )}
                 {/* Counter */}
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white/70 text-xs font-medium">
+                <motion.div
+                  className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white/70 text-xs font-medium"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
                   {lightbox + 1} / {project.gallery.length}
-                </div>
-                <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white/60 text-[11px] font-medium sm:hidden">
-                  Swipe to navigate
-                </div>
+                </motion.div>
+                {/* Navigation hints */}
+                <motion.div
+                  className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white/60 text-[10px] font-medium text-center"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <div className="sm:hidden">Swipe to navigate</div>
+                  <div className="hidden sm:block">← → or click arrows</div>
+                </motion.div>
               </motion.div>
             </motion.div>
           )}
