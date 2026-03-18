@@ -56,6 +56,6 @@ export default defineConfig({
   plugins: [react(), servePublicUnderBase()],
   base: BASE,
   build: {
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 1500,
   },
 });
