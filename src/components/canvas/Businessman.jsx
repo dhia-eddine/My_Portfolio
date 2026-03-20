@@ -26,15 +26,14 @@ const Businessman = ({ isMobile, onLoaded }) => {
     <group>
       <ambientLight intensity={0.5} />
       <hemisphereLight intensity={0.4} groundColor="#1a0a3b" />
-      <directionalLight position={[2, 4, 4]} intensity={1.2} color="#ffffff" />
-      <pointLight position={[-3, 3, 2]} intensity={0.8} color="#915eff" />
-      <pointLight position={[3, -1, 2]} intensity={0.4} color="#2563eb" />
+      <directionalLight position={[-4, 4, 2]} intensity={1.2} color="#ffffff" />
+      <pointLight position={[-1, 3, 0]} intensity={0.8} color="#915eff" />
+      <pointLight position={[-2, -1, -3]} intensity={0.4} color="#2563eb" />
       <primitive
         object={model.scene}
-        //chang the scale and position for mobile and desktop was scale={isMobile ? 2.2 : 2.8} position={isMobile ? [0, -1.5, 0] : [0, -2.2, 0]}
         scale={isMobile ? 3 : 2.5}
         position={isMobile ? [0, 0.2, 0] : [0, -0.5, 0]}
-        rotation={[0, 0, 0]}
+        rotation={[0, -Math.PI / 2, 0]}
       />
     </group>
   );
