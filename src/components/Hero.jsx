@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { styles } from "../styles";
 import { ComputersCanvas } from "./canvas";
+import { BusinessmanCanvas } from "./canvas";
 import ErrorBoundary from "./ErrorBoundary";
 
 const COMPUTER_LOAD_TIMEOUT_MS = 8000;
@@ -163,7 +164,8 @@ const Hero = () => {
               <ErrorBoundary fallback={null}>
                 <div className="absolute inset-0 flex items-start justify-center pt-1 pointer-events-none">
                   <div className="w-[380px] h-[380px] xs:w-[420px] xs:h-[420px] pointer-events-auto">
-                    <ComputersCanvas onLoaded={onLoaded} />
+                    {/* <ComputersCanvas onLoaded={onLoaded} /> */}
+                    <BusinessmanCanvas onLoaded={onLoaded} />
                   </div>
                 </div>
               </ErrorBoundary>
@@ -179,7 +181,8 @@ const Hero = () => {
           <ErrorBoundary fallback={null}>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] pointer-events-auto">
-                <ComputersCanvas onLoaded={onLoaded} />
+                {/* <ComputersCanvas onLoaded={onLoaded} /> */}
+                <BusinessmanCanvas onLoaded={onLoaded} />
               </div>
             </div>
           </ErrorBoundary>
