@@ -2,7 +2,7 @@
   "homepage": "https://dhia-eddine.github.io/My_Portfolio",
   "name": "dia-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
