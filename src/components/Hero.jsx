@@ -4,7 +4,7 @@ import { styles } from "../styles";
 import { ComputersCanvas } from "./canvas";
 import ErrorBoundary from "./ErrorBoundary";
 
-const COMPUTER_LOAD_TIMEOUT_MS = 2500;
+const COMPUTER_LOAD_TIMEOUT_MS = 8000;
 
 const ROLES = [
   "Full Stack Developer",

@@ -122,7 +122,7 @@ const Navbar = () => {
             {!isHome && (
               <li>
                 <Link
-                  to="/"
+                  to="//"
                   className="flex items-center gap-1.5 text-secondary hover:text-white text-[15px] font-medium transition-colors duration-200"
                   onClick={() => setActive("")}
                 >
