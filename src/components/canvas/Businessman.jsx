@@ -16,11 +16,27 @@ if (typeof window !== "undefined" && modelUrl.startsWith("http")) {
   useGLTF.preload(modelUrl);
 }
 
-const Businessman = ({ isMobile, onLoaded }) => {
+const Businessman = ({ screenSize, onLoaded }) => {
   const model = useGLTF(modelUrl);
   useEffect(() => {
     onLoaded?.();
   }, [model, onLoaded]);
+
+  // Dynamic scale and position based on screen size
+  const getModelConfig = () => {
+    if (screenSize === "small") {
+      return { scale: 2, position: [-0.1, 0.8, 0] };
+    }
+    if (screenSize === "medium") {
+      return { scale: 2.6, position: [-0.1, 0.4, 0] };
+    }
+    if (screenSize === "large") {
+      return { scale: 3, position: [-0.1, 0.2, 0] };
+    }
+    return { scale: 2.5, position: [0, -0.5, 0] };
+  };
+
+  const { scale, position } = getModelConfig();
 
   return (
     <group>
@@ -31,8 +47,8 @@ const Businessman = ({ isMobile, onLoaded }) => {
       <pointLight position={[-2, -1, -3]} intensity={0.4} color="#2563eb" />
       <primitive
         object={model.scene}
-        scale={isMobile ? 3 : 2.5}
-        position={isMobile ? [0, 0.2, 0] : [0, -0.5, 0]}
+        scale={scale}
+        position={position}
         rotation={[0, -Math.PI / 2, 0]}
       />
     </group>
@@ -40,15 +56,24 @@ const Businessman = ({ isMobile, onLoaded }) => {
 };
 
 const BusinessmanCanvas = ({ onLoaded }) => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [screenSize, setScreenSize] = useState("desktop");
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width:650px)");
-    setIsMobile(mediaQuery.matches);
-    const handleMediaQueryChange = (event) => setIsMobile(event.matches);
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
-    return () =>
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
+    const getScreenSize = () => {
+      const width = window.innerWidth;
+      if (width <= 375) return "small"; // iPhone SE, small phones
+      if (width <= 480) return "medium"; // Galaxy S21, medium phones
+      if (width <= 768) return "large"; // iPhone 16 Pro Max, large phones
+      return "desktop";
+    };
+
+    const handleResize = () => {
+      setScreenSize(getScreenSize());
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -66,7 +91,7 @@ const BusinessmanCanvas = ({ onLoaded }) => {
           minPolarAngle={Math.PI / 2}
           target={[0, 0, 0]}
         />
-        <Businessman isMobile={isMobile} onLoaded={onLoaded} />
+        <Businessman screenSize={screenSize} onLoaded={onLoaded} />
       </Suspense>
       <Preload all />
     </Canvas>
