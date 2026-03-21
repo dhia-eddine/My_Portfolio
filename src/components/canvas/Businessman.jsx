@@ -28,7 +28,7 @@ const Businessman = ({ screenSize, onLoaded }) => {
       return { scale: 2, position: [-0.1, 0.8, 0] };
     }
     if (screenSize === "medium") {
-      return { scale: 2.6, position: [-0.1, 0.4, 0] };
+      return { scale: 2.8, position: [-0.1, 0.4, 0] };
     }
     if (screenSize === "large") {
       return { scale: 3, position: [-0.1, 0.2, 0] };
