@@ -8,6 +8,7 @@ import { styles } from "../styles";
 import { experiences } from "../constants";
 import { SectionWrapper } from "../hoc";
 import { textVariant } from "../utils/motion";
+import { useState } from "react";
 
 const ExperienceCard = ({ experience }) => (
   <VerticalTimelineElement
@@ -82,6 +83,15 @@ const ExperienceCard = ({ experience }) => (
 );
 
 const Experience = () => {
+  const [visibleCount, setVisibleCount] = useState(3);
+
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 2, experiences.length));
+  };
+
+  const visibleExperiences = experiences.slice(0, visibleCount);
+  const hasMore = visibleCount < experiences.length;
+
   return (
     <>
       <motion.div
@@ -95,10 +105,21 @@ const Experience = () => {
       </motion.div>
       <div className="mt-20 flex flex-col">
         <VerticalTimeline lineColor="rgba(145,94,255,0.2)">
-          {experiences.map((experience, index) => (
+          {visibleExperiences.map((experience, index) => (
             <ExperienceCard key={index} experience={experience} />
           ))}
         </VerticalTimeline>
+
+        {hasMore && (
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={handleSeeMore}
+              className="px-8 py-3 rounded-xl bg-transparent border border-[#915eff] text-[#915eff] font-semibold text-[16px] tracking-wide hover:bg-[#915eff]/10 hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
+              See More
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

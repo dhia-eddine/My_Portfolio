@@ -190,7 +190,7 @@ const experiences = [
       "Iron School streamlines every aspect of school administration. From student management to parent communication, handle it all in one powerful platform.",
   },
   {
-    title: "Full Stack",
+    title: "Full Stack Developer",
     company_name: "Enova ROBOCTICS ",
     icon: enova,
     iconBg: "#E6DEDD" /*"#383E56"*/,
