@@ -38,7 +38,7 @@ const Contact = () => {
         {/* decorative glow */}
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#915eff]/8 rounded-full blur-3xl pointer-events-none" />
 
-        <p className={styles.sectionSubText}>Get in touch</p>
+        <div className="section-label mb-3">Get in touch</div>
         <h3 className={`${styles.sectionHeadText} mt-1 mb-8`}>Contact.</h3>
 
         {/* Email card */}
@@ -46,16 +46,23 @@ const Contact = () => {
           href="mailto:diamandouj@gmail.com"
           className="group flex items-center gap-4 p-4 sm:p-5 rounded-xl border border-white/5 bg-white/3 hover:border-[#915eff]/40 hover:bg-[#915eff]/5 transition-all duration-300 mb-4"
         >
-          <div className="w-11 h-11 rounded-xl bg-[#915eff]/15 flex items-center justify-center shrink-0">
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+            style={{
+              background: "rgba(168,85,247,0.12)",
+              border: "1px solid rgba(168,85,247,0.2)",
+            }}
+          >
             <svg
               width="20"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#915eff"
+              stroke="rgba(168,85,247,0.9)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className="flex-shrink-0 self-center ml-[1px]"
             >
               <rect x="2" y="4" width="20" height="16" rx="2" />
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
@@ -88,16 +95,23 @@ const Contact = () => {
         <div className="group p-4 sm:p-5 rounded-xl border border-white/5 bg-white/3 hover:border-[#915eff]/40 hover:bg-[#915eff]/5 transition-all duration-300 mb-4 sm:mb-8">
           {/* Icon + number on same row always */}
           <div className="flex items-center gap-4 mb-3">
-            <div className="w-11 h-11 rounded-xl bg-[#915eff]/15 flex items-center justify-center shrink-0">
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              style={{
+                background: "rgba(59,127,255,0.12)",
+                border: "1px solid rgba(59,127,255,0.2)",
+              }}
+            >
               <svg
                 width="20"
                 height="20"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#915eff"
+                stroke="rgba(59,127,255,0.9)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                className="flex-shrink-0 self-center ml-[1px]"
               >
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>

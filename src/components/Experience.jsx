@@ -100,7 +100,7 @@ const Experience = () => {
         whileInView="show"
         viewport={{ once: true }}
       >
-        <p className={styles.sectionSubText}>What I have done so far</p>
+        <div className="section-label mb-3">What I have done so far</div>
         <h2 className={styles.sectionHeadText}>Work Experience.</h2>
       </motion.div>
       <div className="mt-20 flex flex-col">

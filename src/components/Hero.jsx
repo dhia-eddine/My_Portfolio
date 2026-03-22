@@ -98,9 +98,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[#915eff] text-sm font-semibold tracking-widest uppercase mb-2">
-              Welcome to my portfolio
-            </p>
+            <div className="section-label mb-2">Welcome to my portfolio</div>
             <h1 className={`${styles.heroHeadText} text-white`}>
               Hi, I&apos;m{" "}
               <span

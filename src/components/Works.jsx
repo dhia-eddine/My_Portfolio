@@ -105,7 +105,7 @@ function Works() {
   return (
     <>
       <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>My work</p>
+        <div className="section-label mb-3">My work</div>
         <h2 className={styles.sectionHeadText}>Projects.</h2>
       </motion.div>
 

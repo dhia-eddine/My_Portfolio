@@ -70,7 +70,7 @@ const Tech = () => {
         whileInView="show"
         viewport={{ once: true }}
       >
-        <p className={styles.sectionSubText}>Technologies I work with</p>
+        <div className="section-label mb-3">Technologies I work with</div>
         <h2 className={styles.sectionHeadText}>Tech Stack.</h2>
       </motion.div>
 

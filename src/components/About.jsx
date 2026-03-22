@@ -40,7 +40,7 @@ const About = () => {
   return (
     <>
       <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Introduction</p>
+        <div className="section-label mb-3">Introduction</div>
         <h2 className={styles.sectionHeadText}>Overview.</h2>
       </motion.div>
 
