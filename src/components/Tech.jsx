@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { technologies } from "../constants";
 import { SectionWrapper } from "../hoc";
-import { BallCanvas } from "./canvas";
+// Removed BallCanvas (3D) for flat icons only
 import ErrorBoundary from "./ErrorBoundary";
 import { textVariant } from "../utils/motion";
 import { styles } from "../styles";
@@ -99,14 +99,7 @@ const Tech = () => {
                   />
                 }
               >
-                {index < firstRowCount ? (
-                  <BallCanvas icon={technology.icon} />
-                ) : (
-                  <StaticTechIcon
-                    icon={technology.icon}
-                    name={technology.name}
-                  />
-                )}
+                <StaticTechIcon icon={technology.icon} name={technology.name} />
               </ErrorBoundary>
             </div>
             <p className="text-center text-xs text-secondary group-hover:text-white/80 transition-colors font-medium">

@@ -16,10 +16,11 @@ const EarthCanvas = () => {
   return (
     /* Set up the 3D canvas with specific camera and rendering settings */
     <Canvas
-      shadows
+      shadows={false}
       frameloop="demand"
-      dpr={[1, 2]}
-      gl={{ preserveDrawingBuffer: true }}
+      dpr={[1, 1.5]}
+      performance={{ min: 0.5 }}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{
         fov: 45,
         near: 0.1,
@@ -30,13 +31,12 @@ const EarthCanvas = () => {
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
           autoRotate
+          enablePan={false}
           enableZoom={false}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
         />
         <Earth />
-
-        <Preload all />
       </Suspense>
     </Canvas>
   );

@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { styles } from "../styles";
-import { ComputersCanvas } from "./canvas";
-import { BusinessmanCanvas } from "./canvas";
 import ErrorBoundary from "./ErrorBoundary";
+
+const BusinessmanCanvas = lazy(() => import("./canvas/Businessman"));
 
 const COMPUTER_LOAD_TIMEOUT_MS = 8000;
 
@@ -56,6 +56,7 @@ function ComputerFallback() {
 const Hero = () => {
   const [loaded, setLoaded] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const role = useTypewriter(ROLES);
 
   const onLoaded = useCallback(() => setLoaded(true), []);
@@ -66,6 +67,14 @@ const Hero = () => {
     }, COMPUTER_LOAD_TIMEOUT_MS);
     return () => clearTimeout(t);
   }, [loaded]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobileViewport(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
 
   return (
     <section className="relative w-full h-screen mx-auto overflow-hidden">
@@ -157,35 +166,41 @@ const Hero = () => {
           </motion.div>
 
           {/* Mobile computer: sits directly under buttons */}
-          <div className="relative mt-6 w-full h-[360px] xs:h-[400px] sm:hidden pointer-events-auto">
-            {!showFallback && (
-              <ErrorBoundary fallback={null}>
-                <div className="absolute inset-0 flex items-start justify-center pt-1 pointer-events-none">
-                  <div className="w-[380px] h-[380px] xs:w-[420px] xs:h-[420px] pointer-events-auto">
-                    {/* <ComputersCanvas onLoaded={onLoaded} /> */}
-                    <BusinessmanCanvas onLoaded={onLoaded} />
-                  </div>
-                </div>
-              </ErrorBoundary>
-            )}
-          </div>
+          {isMobileViewport && (
+            <div className="relative mt-6 w-full h-[360px] xs:h-[400px] sm:hidden pointer-events-auto">
+              {!showFallback && (
+                <ErrorBoundary fallback={null}>
+                  <Suspense fallback={null}>
+                    <div className="absolute inset-0 flex items-start justify-center pt-1 pointer-events-none">
+                      <div className="w-[380px] h-[380px] xs:w-[420px] xs:h-[420px] pointer-events-auto">
+                        <BusinessmanCanvas onLoaded={onLoaded} />
+                      </div>
+                    </div>
+                  </Suspense>
+                </ErrorBoundary>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* 3D computer — centered */}
-      <div className="hidden sm:block">
-        <ComputerFallback />
-        {!showFallback && (
-          <ErrorBoundary fallback={null}>
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] pointer-events-auto">
-                {/* <ComputersCanvas onLoaded={onLoaded} /> */}
-                <BusinessmanCanvas onLoaded={onLoaded} />
-              </div>
-            </div>
-          </ErrorBoundary>
-        )}
-      </div>
+      {!isMobileViewport && (
+        <div className="hidden sm:block">
+          <ComputerFallback />
+          {!showFallback && (
+            <ErrorBoundary fallback={null}>
+              <Suspense fallback={null}>
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] pointer-events-auto">
+                    <BusinessmanCanvas onLoaded={onLoaded} />
+                  </div>
+                </div>
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </div>
+      )}
 
       {/* Scroll indicator */}
       <div className="absolute xs:bottom-10 bottom-8 w-full flex justify-center items-center z-10">

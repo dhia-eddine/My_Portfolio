@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -6,18 +6,15 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import {
-  About,
-  Contact,
-  Experience,
-  Feedbacks,
-  Hero,
-  Navbar,
-  Tech,
-  Works,
-  ProjectDetail,
-  StarsCanvas,
-} from "./components";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import Experience from "./components/Experience";
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
+import Tech from "./components/Tech";
+import Works from "./components/Works";
+
+const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 
 const ScrollToHash = () => {
   const { pathname, hash } = useLocation();
@@ -73,10 +70,16 @@ const App = () => {
           <Route
             path="/project/:id"
             element={
-              <>
+              <Suspense
+                fallback={
+                  <div className="min-h-screen flex items-center justify-center text-secondary">
+                    Loading project...
+                  </div>
+                }
+              >
                 <Navbar />
                 <ProjectDetail />
-              </>
+              </Suspense>
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
