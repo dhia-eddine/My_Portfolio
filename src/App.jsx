@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
@@ -58,12 +58,9 @@ const HomePage = () => {
   );
 };
 
-// Match Vite base (e.g. "/My_Portfolio/") so routes work when app is served from a subpath
-const basename = (import.meta.env.BASE_URL || "/").replace(/\/$/, "") || "/";
-
 const App = () => {
   return (
-    <BrowserRouter basename={basename}>
+    <HashRouter>
       <div className="relative z-0">
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -85,7 +82,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
