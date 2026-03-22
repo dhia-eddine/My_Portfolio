@@ -7,9 +7,9 @@ const COLORS = {
 };
 
 const CONFIG = {
-  dotCountDesktop: 52,
-  dotCountMobile: 28,
-  fps: 30,
+  dotCountDesktop: 80,
+  dotCountMobile: 38,
+  fps: 60,
   minRadius: 1.5,
   maxRadius: 3,
   speed: 0.4,
