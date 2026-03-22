@@ -7,7 +7,9 @@ const COLORS = {
 };
 
 const CONFIG = {
-  dotCount: 80,
+  dotCountDesktop: 52,
+  dotCountMobile: 28,
+  fps: 30,
   minRadius: 1.5,
   maxRadius: 3,
   speed: 0.4,
@@ -40,11 +42,22 @@ const DotsBackground = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     const isLikelyTouchDevice = window.matchMedia("(hover: none)").matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     let animId;
     let mouse = { x: null, y: null };
     let dots = [];
     let viewport = { width: 0, height: 0 };
     let lastViewport = { width: 0, height: 0 };
+    let lastFrame = 0;
+
+    if (prefersReducedMotion) {
+      return undefined;
+    }
+
+    const getDotCount = (width) =>
+      width <= 768 ? CONFIG.dotCountMobile : CONFIG.dotCountDesktop;
 
     const resize = ({ force = false } = {}) => {
       const nextWidth = window.innerWidth;
@@ -72,7 +85,14 @@ const DotsBackground = () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       if (dots.length === 0) {
-        dots = Array.from({ length: CONFIG.dotCount }, () =>
+        dots = Array.from({ length: getDotCount(viewport.width) }, () =>
+          createDot(viewport.width, viewport.height),
+        );
+        return;
+      }
+
+      if (dots.length !== getDotCount(viewport.width)) {
+        dots = Array.from({ length: getDotCount(viewport.width) }, () =>
           createDot(viewport.width, viewport.height),
         );
         return;
@@ -97,7 +117,19 @@ const DotsBackground = () => {
 
     const onOrientationChange = () => resize({ force: true });
 
-    const draw = () => {
+    const draw = (timestamp = 0) => {
+      if (document.hidden) {
+        animId = requestAnimationFrame(draw);
+        return;
+      }
+
+      const frameInterval = 1000 / CONFIG.fps;
+      if (timestamp - lastFrame < frameInterval) {
+        animId = requestAnimationFrame(draw);
+        return;
+      }
+      lastFrame = timestamp;
+
       const { width, height } = viewport;
       ctx.fillStyle = "#050816";
       ctx.fillRect(0, 0, width, height);
@@ -122,11 +154,13 @@ const DotsBackground = () => {
           const d2 = dots[j];
           const dx = d.x - d2.x;
           const dy = d.y - d2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
+          const maxDist = CONFIG.connectionDistance;
+          const maxDistSq = maxDist * maxDist;
 
-          if (dist < CONFIG.connectionDistance) {
-            const alpha =
-              CONFIG.lineOpacityMax * (1 - dist / CONFIG.connectionDistance);
+          if (distSq < maxDistSq) {
+            const dist = Math.sqrt(distSq);
+            const alpha = CONFIG.lineOpacityMax * (1 - dist / maxDist);
             ctx.beginPath();
             ctx.moveTo(d.x, d.y);
             ctx.lineTo(d2.x, d2.y);
@@ -179,7 +213,7 @@ const DotsBackground = () => {
     window.addEventListener("orientationchange", onOrientationChange);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseleave", onMouseLeave);
-    draw();
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);

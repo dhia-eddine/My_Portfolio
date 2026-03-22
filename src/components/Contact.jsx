@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 import { styles } from "../styles";
-import { EarthCanvas } from "./canvas";
+import EarthCanvas from "./canvas/Earth";
 import { SectionWrapper } from "../hoc";
 import { slideIn, fadeIn } from "../utils/motion";
 import { github, linkedin, instagram } from "../assets";

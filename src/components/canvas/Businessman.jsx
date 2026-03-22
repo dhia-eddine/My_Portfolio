@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unknown-property -- R3F/Three.js primitives */
 import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import CanvasLoader from "../Loader";
 
 function getModelUrl() {
@@ -78,14 +78,17 @@ const BusinessmanCanvas = ({ onLoaded }) => {
 
   return (
     <Canvas
-      frameloop="always"
-      shadows
+      frameloop="demand"
+      dpr={[1, 1.5]}
+      shadows={false}
+      performance={{ min: 0.5 }}
       camera={{ position: [0, 0, 6], fov: 35 }}
-      gl={{ preserveDrawingBuffer: true, alpha: true }}
+      gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       style={{ background: "transparent" }}
     >
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
+          enablePan={false}
           enableZoom={false}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
@@ -93,7 +96,6 @@ const BusinessmanCanvas = ({ onLoaded }) => {
         />
         <Businessman screenSize={screenSize} onLoaded={onLoaded} />
       </Suspense>
-      <Preload all />
     </Canvas>
   );
 };

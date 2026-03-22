@@ -57,5 +57,16 @@ export default defineConfig({
   base: BASE,
   build: {
     chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("three") || id.includes("@react-three")) {
+            return "vendor-three";
+          }
+          if (id.includes("framer-motion")) return "vendor-motion";
+        },
+      },
+    },
   },
 });
