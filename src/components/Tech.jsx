@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { technologies } from "../constants";
 import { SectionWrapper } from "../hoc";
-// Removed BallCanvas (3D) for flat icons only to keep it simple and performant across all devices.
+// Removed BallCanvas (3D ) for flat icons only to keep it simple and performant across all devices .
+// If you want to add 3D icons back, you can create a new component similar to Computers.jsx and use it here instead of StaticTechIcon.
 import ErrorBoundary from "./ErrorBoundary";
 import { textVariant } from "../utils/motion";
 import { styles } from "../styles";
