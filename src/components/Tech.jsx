@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { technologies } from "../constants";
 import { SectionWrapper } from "../hoc";
-// Removed BallCanvas (3D) for flat icons only
+// Removed BallCanvas (3D) for flat icons only wihout the 3d
 import ErrorBoundary from "./ErrorBoundary";
 import { textVariant } from "../utils/motion";
 import { styles } from "../styles";
