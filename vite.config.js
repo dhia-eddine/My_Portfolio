@@ -3,7 +3,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const BASE = "/My_Portfolio/";
+const BASE = process.env.NODE_ENV === "production" ? "/My_Portfolio/" : "/";
 
 // In dev: serve public files under base path so /My_Portfolio/desktop_pc/* works (enforce: pre so we run first)
 function servePublicUnderBase() {
