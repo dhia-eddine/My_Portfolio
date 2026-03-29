@@ -1,16 +1,25 @@
+#!/usr/bin/env python3
 import subprocess
 import os
+import sys
 
-# List what's in the current directory
-print("Current dir:", os.getcwd())
-print("Contents:", os.listdir())
+# The project is in /vercel/share/v0-project according to the working directory message
+project_paths = [
+    '/vercel/share/v0-project',
+    os.path.expanduser('~/My_Portfolio'),
+    os.path.expanduser('~/projects/My_Portfolio'),
+    '/workspace',
+    '/app',
+]
 
-# Try to find package.json
-for root, dirs, files in os.walk('.'):
-    if 'package.json' in files:
-        print(f"Found package.json in: {root}")
-        os.chdir(root)
-        break
+for path in project_paths:
+    if os.path.exists(os.path.join(path, 'package.json')):
+        print(f"[v0] Found project at: {path}")
+        os.chdir(path)
+        print(f"[v0] Changed to: {os.getcwd()}")
+        print(f"[v0] Running: npm run dev")
+        result = subprocess.run(['npm', 'run', 'dev'])
+        sys.exit(result.returncode)
 
-print("Working dir now:", os.getcwd())
-result = subprocess.run(['npm', 'run', 'dev'])
+print(f"[v0] ERROR: Could not find project directory with package.json")
+sys.exit(1)
