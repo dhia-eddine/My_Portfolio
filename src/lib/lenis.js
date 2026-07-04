@@ -30,13 +30,18 @@ export function getLenis() {
 }
 
 /** Smooth-scroll to an element id, falling back to native scroll. */
-export function scrollToId(id, { offset = 0 } = {}) {
+export function scrollToId(id, { offset = 0, immediate = false } = {}) {
   const el = document.getElementById(id);
   if (!el) return false;
   if (lenis) {
-    lenis.scrollTo(el, { offset, duration: 1.2 });
+    lenis.resize?.();
+    lenis.scrollTo(el, {
+      offset,
+      immediate,
+      duration: immediate ? 0 : 1.2,
+    });
   } else {
-    el.scrollIntoView({ behavior: "smooth" });
+    el.scrollIntoView({ behavior: immediate ? "auto" : "smooth" });
   }
   return true;
 }

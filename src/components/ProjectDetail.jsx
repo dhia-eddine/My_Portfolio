@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { projects, siteMeta } from "../constants";
 import { styles } from "../styles";
 import { EASE } from "../utils/motion";
@@ -8,6 +8,7 @@ import { RevealLines, FadeUp } from "./ui/Reveal";
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const project = projects.find((p) => p.id === id);
   const nextProject =
     projects[(projects.findIndex((p) => p.id === id) + 1) % projects.length];
@@ -47,6 +48,10 @@ const ProjectDetail = () => {
     if (Math.abs(deltaX) < Math.abs(deltaY) || Math.abs(deltaX) < 40) return;
     if (deltaX > 0) goPrev();
     else goNext();
+  };
+
+  const goToHomeSection = (sectionId) => {
+    navigate({ pathname: "/", search: `?scrollTo=${sectionId}` });
   };
 
   useEffect(() => {
@@ -98,8 +103,9 @@ const ProjectDetail = () => {
     >
       {/* Back */}
       <FadeUp y={0}>
-        <Link
-          to={{ pathname: "/", hash: "#work" }}
+        <button
+          type="button"
+          onClick={() => goToHomeSection("work")}
           className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-mute hover:text-paper transition-colors"
         >
           <svg
@@ -116,7 +122,7 @@ const ProjectDetail = () => {
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
           All projects
-        </Link>
+        </button>
       </FadeUp>
 
       {/* Title */}
@@ -276,18 +282,20 @@ const ProjectDetail = () => {
           </svg>
         </Link>
         <div className="mt-12 flex justify-between items-center flex-wrap gap-4">
-          <Link
-            to={{ pathname: "/", hash: "#work" }}
+          <button
+            type="button"
+            onClick={() => goToHomeSection("work")}
             className="link-sweep font-mono text-[11px] tracking-[0.18em] uppercase text-mute hover:text-paper transition-colors"
           >
             ← Back to all projects
-          </Link>
-          <Link
-            to={{ pathname: "/", hash: "#contact" }}
+          </button>
+          <button
+            type="button"
+            onClick={() => goToHomeSection("contact")}
             className="link-sweep font-mono text-[11px] tracking-[0.18em] uppercase text-paper"
           >
             Get in touch
-          </Link>
+          </button>
         </div>
       </div>
 

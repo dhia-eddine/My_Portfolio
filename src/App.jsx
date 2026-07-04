@@ -22,18 +22,32 @@ import { siteMeta } from "./constants";
 const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 
 const ScrollToHash = () => {
-  const { pathname, hash } = useLocation();
+  const { pathname, search, hash, state } = useLocation();
   useEffect(() => {
-    if (pathname === "/" && hash) {
-      const id = hash.replace("#", "");
+    const params = new URLSearchParams(search);
+    const targetId =
+      params.get("scrollTo") ?? state?.scrollTo ?? hash?.replace("#", "");
+    const timers = [];
+
+    if (pathname === "/" && targetId) {
       const tryScroll = (attempts = 0) => {
-        if (!scrollToId(id) && attempts < 10) {
-          setTimeout(() => tryScroll(attempts + 1), 100);
+        if (!scrollToId(targetId, { immediate: attempts > 0 }) && attempts < 10) {
+          timers.push(setTimeout(() => tryScroll(attempts + 1), 100));
         }
       };
-      tryScroll();
+      requestAnimationFrame(() => tryScroll());
+
+      [250, 700, 1300, 2200].forEach((delay) => {
+        timers.push(
+          setTimeout(() => {
+            scrollToId(targetId, { immediate: true });
+          }, delay),
+        );
+      });
     }
-  }, [pathname, hash]);
+
+    return () => timers.forEach((timer) => clearTimeout(timer));
+  }, [pathname, search, hash, state]);
   return null;
 };
 

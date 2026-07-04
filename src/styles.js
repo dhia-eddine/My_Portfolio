@@ -5,11 +5,10 @@ const styles = {
   sectionY: "py-24 sm:py-32 lg:py-40",
 
   heroHeadText:
-    "font-display font-medium text-display-xl text-paper uppercase select-none",
+    "font-display font-medium text-[3rem] leading-[0.92] tracking-[-0.02em] text-paper uppercase select-none xs:text-[3.75rem] sm:text-[5rem] md:text-[5.625rem] lg:text-[6.25rem] xl:text-[7rem] 2xl:text-[7.5rem]",
   sectionHeadText:
     "font-display font-medium text-display-lg text-paper tracking-tight",
-  sectionSubText:
-    "text-mute text-base sm:text-lg leading-relaxed max-w-2xl",
+  sectionSubText: "text-mute text-base sm:text-lg leading-relaxed max-w-2xl",
 };
 
 export { styles };

@@ -7,6 +7,7 @@ import { useLoad } from "../lib/LoadContext";
 import { scrollToId } from "../lib/lenis";
 import Magnetic from "./ui/Magnetic";
 import ErrorBoundary from "./ErrorBoundary";
+import portrait from "../assets/dia_head.png";
 
 const ParticleField = lazy(() => import("./canvas/ParticleField"));
 
@@ -24,6 +25,16 @@ const fadeVariants = {
     opacity: 1,
     y: 0,
     transition: { duration: 0.9, ease: EASE, delay },
+  }),
+};
+
+const portraitVariants = {
+  hidden: { opacity: 0, y: 32, scale: 0.96 },
+  show: (delay) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 1.05, ease: EASE, delay },
   }),
 };
 
@@ -58,36 +69,65 @@ const Hero = () => {
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className={`${styles.paddingX} relative z-10 max-w-[1680px] mx-auto w-full flex-1 flex flex-col justify-start pb-6 pt-28 sm:pt-36 lg:pt-20`}
+        className={`${styles.paddingX} relative z-10 max-w-[1680px] mx-auto w-full min-h-[100svh] flex flex-col justify-between gap-[clamp(1.5rem,4vh,3.5rem)] pb-5 pt-24 sm:pt-28 lg:pt-20`}
       >
-        {/* Identity */}
-        <h1 className={styles.heroHeadText}>
-          <span className="mask-line">
-            <motion.span
-              className="block will-change-transform"
-              variants={lineVariants}
-              custom={0.25}
-              initial="hidden"
-              animate={anim}
-            >
-              Dhia <span className="text-stroke">Eddine</span>
-            </motion.span>
-          </span>
-          <span className="mask-line">
-            <motion.span
-              className="block will-change-transform"
-              variants={lineVariants}
-              custom={0.37}
-              initial="hidden"
-              animate={anim}
-            >
-              Mandhouj<span className="text-accent">.</span>
-            </motion.span>
-          </span>
-        </h1>
+        {/* Identity + portrait */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          <h1 className={`${styles.heroHeadText} lg:col-span-7`}>
+            <span className="mask-line">
+              <motion.span
+                className="block will-change-transform"
+                variants={lineVariants}
+                custom={0.25}
+                initial="hidden"
+                animate={anim}
+              >
+                Dhia <span className="text-stroke">Eddine</span>
+              </motion.span>
+            </span>
+            <span className="mask-line">
+              <motion.span
+                className="block will-change-transform"
+                variants={lineVariants}
+                custom={0.37}
+                initial="hidden"
+                animate={anim}
+              >
+                Mandhouj<span className="text-accent">.</span>
+              </motion.span>
+            </span>
+          </h1>
+
+          <motion.div
+            variants={portraitVariants}
+            custom={0.48}
+            initial="hidden"
+            animate={anim}
+            className="lg:col-span-5 lg:col-start-8 flex justify-center lg:justify-end"
+          >
+            <div className="relative w-full max-w-[200px] xs:max-w-[240px] sm:max-w-[280px] lg:max-w-[320px] xl:max-w-[360px]">
+              <div
+                className="absolute top-3 left-3 -right-3 -bottom-3 rounded-lg border hairline pointer-events-none hidden sm:block"
+                aria-hidden="true"
+              />
+              <div className="relative overflow-hidden rounded-lg border hairline bg-ink-700 shadow-[0_24px_80px_-20px_rgba(135,87,255,0.22)]">
+                <img
+                  src={portrait}
+                  alt="Dhia Eddine Mandhouj"
+                  width={720}
+                  height={720}
+                  decoding="async"
+                  className="w-full aspect-square object-cover object-[center_12%]"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink via-ink/60 to-transparent pointer-events-none" />
+                <div className="absolute top-0 left-0 h-full w-px bg-accent/40" aria-hidden="true" />
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Statement + CTAs */}
-        <div className="mt-10 sm:mt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <motion.div
             variants={fadeVariants}
             custom={0.55}
@@ -147,7 +187,7 @@ const Hero = () => {
           custom={0.85}
           initial="hidden"
           animate={anim}
-          className="mt-14 sm:mt-20 border-t hairline pt-5 flex items-center justify-between gap-4"
+          className="border-t hairline pt-5 flex items-center justify-between gap-4"
         >
           <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-mute">
             Based in {siteMeta.location} — working worldwide
