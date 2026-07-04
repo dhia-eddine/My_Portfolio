@@ -1,128 +1,138 @@
-import { motion } from "framer-motion";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
-import { styles } from "../styles";
+/* eslint-disable react/prop-types -- experience shape from constants */
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { experiences } from "../constants";
 import { SectionWrapper } from "../hoc";
-import { textVariant } from "../utils/motion";
-import { useState } from "react";
+import { EASE } from "../utils/motion";
+import SectionHeading from "./ui/SectionHeading";
 
-const ExperienceCard = ({ experience }) => (
-  <VerticalTimelineElement
-    contentStyle={{
-      background: "linear-gradient(135deg, #12103a 0%, #0e0c2a 100%)",
-      color: "#fff",
-      border: "1px solid rgba(145,94,255,0.15)",
-      borderRadius: "16px",
-      boxShadow: "0 4px 30px rgba(0,0,0,0.4)",
-    }}
-    contentArrowStyle={{ borderRight: "7px solid rgba(145,94,255,0.3)" }}
-    date={
-      <span className="text-[#915eff] font-semibold text-sm tracking-wide">
-        {experience.date}
-      </span>
-    }
-    iconStyle={{
-      background: experience.iconBg,
-      boxShadow: "0 0 0 4px #915eff33, 0 0 20px rgba(145,94,255,0.2)",
-    }}
-    icon={
-      <div className="flex justify-center items-center w-full h-full">
-        <img
-          src={experience.icon}
-          alt={experience.company_name}
-          className="w-[75%] h-[75%] object-contain"
-        />
-      </div>
-    }
-  >
-    <div className="mb-4">
-      <h3 className="text-white text-[22px] font-bold leading-tight">
-        {experience.title}
-      </h3>
-      <p
-        className="text-[#915eff] text-[15px] font-semibold mt-1"
-        style={{ margin: "4px 0 0" }}
+const ExperienceRow = ({ experience, i, openIndex, setOpenIndex }) => {
+  const isOpen = openIndex === i;
+  const panelId = `experience-panel-${i}`;
+
+  return (
+    <motion.li
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-6% 0px" }}
+      transition={{ duration: 0.7, ease: EASE, delay: Math.min(i * 0.05, 0.25) }}
+      className="border-t hairline last:border-b"
+    >
+      <button
+        onClick={() => setOpenIndex(isOpen ? -1 : i)}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="group w-full grid grid-cols-12 items-center gap-3 sm:gap-4 py-6 sm:py-8 text-left"
       >
-        {experience.company_name}
-      </p>
-    </div>
+        <span className="col-span-12 sm:col-span-3 order-3 sm:order-1 font-mono text-[11px] tracking-[0.16em] uppercase text-mute">
+          {experience.date}
+        </span>
 
-    <div className="h-px bg-gradient-to-r from-[#915eff]/30 to-transparent mb-4" />
+        <span className="col-span-10 sm:col-span-7 order-1 sm:order-2 flex items-center gap-4">
+          <span className="hidden sm:flex w-11 h-11 rounded-full bg-ink-700 border hairline items-center justify-center overflow-hidden shrink-0">
+            <img
+              src={experience.icon}
+              alt=""
+              loading="lazy"
+              className="w-6 h-6 object-contain opacity-80"
+            />
+          </span>
+          <span>
+            <span className="block font-display text-xl sm:text-2xl font-medium text-paper transition-colors duration-300 group-hover:text-accent-soft">
+              {experience.title}
+            </span>
+            <span className="block mt-0.5 text-sm text-mute">
+              {experience.company_name}
+            </span>
+          </span>
+        </span>
 
-    <p className="text-[#aaa6c3] text-[13px] font-semibold uppercase tracking-wider mb-3">
-      {experience.key_q}
-    </p>
+        <span className="col-span-2 order-2 sm:order-3 flex justify-end">
+          <span className="relative w-9 h-9 rounded-full border hairline flex items-center justify-center transition-colors duration-300 group-hover:border-accent-soft/50">
+            <motion.svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              className="text-paper"
+              animate={{ rotate: isOpen ? 45 : 0 }}
+              transition={{ duration: 0.45, ease: EASE }}
+            >
+              <path d="M12 5v14M5 12h14" />
+            </motion.svg>
+          </span>
+        </span>
+      </button>
 
-    <ul className="space-y-2">
-      {experience.points.map((point, index) => (
-        <li
-          key={`experience-point-${index}`}
-          className="text-white/80 text-[14px] leading-relaxed flex gap-2"
-        >
-          <span className="text-[#915eff] mt-1 shrink-0">▸</span>
-          <span>{point}</span>
-        </li>
-      ))}
-    </ul>
-
-    {experience.project_d && (
-      <div className="mt-5 p-4 rounded-xl bg-white/3 border border-white/5">
-        <p className="text-[#915eff] text-[12px] font-semibold uppercase tracking-wider mb-2">
-          Project Summary
-        </p>
-        <p className="text-white/70 text-[13px] leading-relaxed">
-          {experience.project_d}
-        </p>
-      </div>
-    )}
-  </VerticalTimelineElement>
-);
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={panelId}
+            key="panel"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-12 gap-4 pb-8 sm:pb-10">
+              <ul className="col-span-12 sm:col-span-7 sm:col-start-4 space-y-3 list-none">
+                {experience.points.map((point, idx) => (
+                  <li
+                    key={idx}
+                    className="flex gap-3 text-sm sm:text-[15px] leading-relaxed text-mute"
+                  >
+                    <span className="mt-[9px] w-3 h-px bg-accent shrink-0" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+                {experience.project_d && (
+                  <li className="pt-4 mt-4 border-t hairline">
+                    <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-accent-soft/80 mb-2">
+                      Project
+                    </p>
+                    <p className="text-sm leading-relaxed text-paper/70">
+                      {experience.project_d}
+                    </p>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.li>
+  );
+};
 
 const Experience = () => {
-  const [visibleCount, setVisibleCount] = useState(3);
-
-  const handleSeeMore = () => {
-    setVisibleCount((prev) => Math.min(prev + 2, experiences.length));
-  };
-
-  const visibleExperiences = experiences.slice(0, visibleCount);
-  const hasMore = visibleCount < experiences.length;
+  const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <>
-      <motion.div
-        variants={textVariant()}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-      >
-        <div className="section-label mb-3">What I have done so far</div>
-        <h2 className={styles.sectionHeadText}>Work Experience.</h2>
-      </motion.div>
-      <div className="mt-20 flex flex-col">
-        <VerticalTimeline lineColor="rgba(145,94,255,0.2)">
-          {visibleExperiences.map((experience, index) => (
-            <ExperienceCard key={index} experience={experience} />
-          ))}
-        </VerticalTimeline>
+      <SectionHeading
+        index="02"
+        eyebrow="Career"
+        lines={["Work", "Experience"]}
+      />
 
-        {hasMore && (
-          <div className="flex justify-center mt-10">
-            <button
-              onClick={handleSeeMore}
-              className="px-8 py-3 rounded-xl bg-transparent border border-[#915eff] text-[#915eff] font-semibold text-[16px] tracking-wide hover:bg-[#915eff]/10 hover:scale-105 transition-all duration-300 cursor-pointer"
-            >
-              See More
-            </button>
-          </div>
-        )}
-      </div>
+      <ul className="mt-14 sm:mt-20 list-none">
+        {experiences.map((experience, i) => (
+          <ExperienceRow
+            key={`${experience.company_name}-${experience.date}`}
+            experience={experience}
+            i={i}
+            openIndex={openIndex}
+            setOpenIndex={setOpenIndex}
+          />
+        ))}
+      </ul>
     </>
   );
 };
 
-export default SectionWrapper(Experience, "Experience");
+const ExperienceSection = SectionWrapper(Experience, "experience");
+export default ExperienceSection;

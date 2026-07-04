@@ -1,43 +1,11 @@
-import creator from "./creator.png";
 import logo from "./logo.svg";
-import backend from "./backend.png";
-import frontend from "./frontend.png";
-import web from "./web.png";
-import nestjs from "./tech/nestjs.png";
-import github from "./github.png";
-import linkedin from "./linkedin.png";
-import instagram from "./instagram.png";
-import menu from "./menu.svg";
-import close from "./close.svg";
-
-import css from "./tech/css.png";
-import angular from "./tech/angular.png";
-import django from "./tech/django.png";
-
-import java from "./tech/java.png";
-import python from "./tech/python.png";
-
-import adobexd from "./tech/adobexd.png";
-import git from "./tech/git.png";
-import html from "./tech/html.png";
-import javascript from "./tech/javascript.png";
-import mongodb from "./tech/mongodb.png";
-import nodejs from "./tech/nodejs.png";
-import reactjs from "./tech/reactjs.png";
-import sql from "./tech/sql.png";
-import tailwind from "./tech/tailwind.png";
-import typescript from "./tech/typescript.png";
-import threejs from "./tech/threejs.svg";
-import nx from "./tech/nx_monorepos.png";
 
 import enova from "./company/enova.png";
 import proxicon from "./company/proxicon.png";
-
 import irontech from "./company/irontech.png";
 import iron_school from "./company/iron_school.png";
 
 // Iron School project images
-import ironSchoolOg from "./prject_images/iron-school/iron_school_og.png";
 import ironSchoolIntro from "./prject_images/iron-school/iron_school_intro.png";
 import ironSchoolAdmin1 from "./prject_images/iron-school/iron_school_admin_1.png";
 import ironSchoolAdmin2 from "./prject_images/iron-school/iron_school_admin_2.png";
@@ -59,8 +27,7 @@ import ironSchoolMobile9 from "./prject_images/iron-school/iron_school_mobile_9.
 import ironSchoolMobile10 from "./prject_images/iron-school/iron_school_mobile_10.png";
 import ironSchoolMobile11 from "./prject_images/iron-school/iron_school_mobile_11.png";
 
-// Project gallery images (prject_images folder)
-import cobotList from "./prject_images/enova-robotics/cobot_list.png";
+// Enova UR10e cobot project images
 import cobotList2 from "./prject_images/enova-robotics/cobot_list2.png";
 import cobotContr from "./prject_images/enova-robotics/cobot_contr.png";
 import cobotContr2 from "./prject_images/enova-robotics/cobot_contr2.png";
@@ -78,40 +45,11 @@ import pdf1 from "./prject_images/enova-robotics/pdf1.png";
 import reportPdf from "./prject_images/enova-robotics/report pdf.png";
 
 export {
-  angular,
-  python,
-  creator,
-  django,
   logo,
-  backend,
-  frontend,
-  web,
-  github,
-  linkedin,
-  instagram,
-  menu,
-  close,
-  css,
-  java,
-  adobexd,
-  git,
-  html,
-  javascript,
-  mongodb,
-  nodejs,
-  reactjs,
-  sql,
-  tailwind,
-  typescript,
-  threejs,
-  nx,
   enova,
   irontech,
   iron_school,
-  nestjs,
   proxicon,
-  // Iron School project images
-  ironSchoolOg,
   ironSchoolIntro,
   ironSchoolAdmin1,
   ironSchoolAdmin2,
@@ -132,8 +70,6 @@ export {
   ironSchoolMobile9,
   ironSchoolMobile10,
   ironSchoolMobile11,
-
-  // Project gallery
   cobotList2,
   cobotContr,
   cobotContr2,

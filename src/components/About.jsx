@@ -1,72 +1,102 @@
+/* eslint-disable react/prop-types -- service shape from constants */
 import { motion } from "framer-motion";
-import React from "react";
-import { styles } from "../styles";
-import { services } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
-import { Tilt } from "react-tilt";
+import { services, stats } from "../constants";
 import { SectionWrapper } from "../hoc";
+import { EASE } from "../utils/motion";
+import SectionHeading from "./ui/SectionHeading";
+import { FadeUp } from "./ui/Reveal";
 
-const ICONS = ["🌐", "🎨", "⚙️"];
+const ServiceRow = ({ service, i }) => (
+  <motion.li
+    initial={{ opacity: 0, y: 32 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: "-10% 0px" }}
+    transition={{ duration: 0.8, ease: EASE, delay: i * 0.08 }}
+    className="group relative border-t hairline last:border-b overflow-hidden"
+  >
+    {/* Hover sweep */}
+    <div className="absolute inset-0 bg-ink-700 origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-expo" />
 
-const ServiceCard = ({ index, title, icon }) => {
-  return (
-    <Tilt className="xs:w-[260px] w-full">
-      <motion.div
-        variants={fadeIn("right", "spring", 0.15 * index, 0.75)}
-        className="w-full rounded-2xl p-[1px] animated-border"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(145,94,255,0.3), rgba(37,99,235,0.3))",
-        }}
-      >
-        <div className="bg-[#0f0c24] rounded-2xl py-8 px-10 min-h-[260px] flex justify-evenly items-center flex-col relative overflow-hidden group cursor-default">
-          {/* Hover glow bg */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#915eff]/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-          <div className="relative w-20 h-20 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-[#915eff]/40 transition-colors duration-300">
-            <img src={icon} alt={title} className="w-12 h-12 object-contain" />
-          </div>
-
-          <h3 className="text-white text-[18px] font-bold text-center relative z-10 group-hover:text-[#dfd9ff] transition-colors">
-            {title}
-          </h3>
-        </div>
-      </motion.div>
-    </Tilt>
-  );
-};
+    <div className="relative grid grid-cols-12 items-baseline gap-4 py-7 sm:py-9">
+      <span className="col-span-2 sm:col-span-1 font-mono text-[11px] text-accent-soft/80">
+        ({service.index})
+      </span>
+      <h3 className="col-span-10 sm:col-span-4 font-display text-xl sm:text-2xl lg:text-3xl font-medium text-paper transition-transform duration-500 ease-expo group-hover:translate-x-2">
+        {service.title}
+      </h3>
+      <p className="col-span-10 col-start-3 sm:col-span-5 sm:col-start-6 text-sm sm:text-[15px] leading-relaxed text-mute">
+        {service.description}
+      </p>
+      <div className="col-span-10 col-start-3 sm:col-span-2 sm:col-start-11 flex sm:flex-col flex-wrap gap-x-3 gap-y-1 sm:items-end">
+        {service.keywords.map((k) => (
+          <span
+            key={k}
+            className="font-mono text-[10px] tracking-[0.14em] uppercase text-mute/70"
+          >
+            {k}
+          </span>
+        ))}
+      </div>
+    </div>
+  </motion.li>
+);
 
 const About = () => {
   return (
     <>
-      <motion.div variants={textVariant()}>
-        <div className="section-label mb-3">Introduction</div>
-        <h2 className={styles.sectionHeadText}>Overview.</h2>
-      </motion.div>
+      <SectionHeading index="01" eyebrow="About me" lines={["Overview"]} />
 
-      <motion.div variants={fadeIn("", "", 0.1, 1)} className="mt-6">
-        <p className="text-secondary text-[17px] leading-[32px]">
-          I am a highly skilled software developer proficient in{" "}
-          <span className="text-white font-medium">
-            TypeScript, JavaScript, Java, and Python
-          </span>
-          , with extensive experience in frameworks such as{" "}
-          <span className="text-white font-medium">
-            ReactJS, NextJS, and NestJS
-          </span>
-          . My expertise allows me to quickly grasp new concepts and work
-          closely with clients to develop efficient, scalable, and user-friendly
-          solutions that solve real-world challenges.
-        </p>
-      </motion.div>
+      <div className="mt-14 sm:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <FadeUp className="lg:col-span-8 lg:col-start-5" delay={0.1}>
+          <p className="font-display text-display-md text-paper/90 font-normal max-w-3xl">
+            I&apos;m a full-stack developer who turns complex requirements into{" "}
+            <span className="text-accent-soft">efficient, scalable</span> and
+            user-friendly products — fluent in{" "}
+            <span className="text-accent-soft">TypeScript, Java and Python</span>,
+            at home with React, NextJS and NestJS.
+          </p>
+          <p className="mt-8 text-mute text-base sm:text-lg leading-relaxed max-w-xl">
+            My expertise allows me to quickly grasp new concepts and work
+            closely with clients and teams to ship solutions that solve
+            real-world challenges — from school platforms to industrial robot
+            interfaces.
+          </p>
+        </FadeUp>
+      </div>
 
-      <div className="mt-16 flex flex-wrap gap-8 justify-center">
-        {services.map((service, index) => (
-          <ServiceCard key={service.title} index={index} {...service} />
+      {/* Stats */}
+      <div className="mt-20 sm:mt-28 grid grid-cols-2 lg:grid-cols-4 border-t border-l hairline">
+        {stats.map((stat, i) => (
+          <FadeUp
+            key={stat.label}
+            delay={i * 0.06}
+            y={20}
+            className="border-b border-r hairline p-6 sm:p-8"
+          >
+            <p className="font-display text-4xl sm:text-5xl font-medium text-paper">
+              {stat.value}
+            </p>
+            <p className="mt-3 font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-mute">
+              {stat.label}
+            </p>
+          </FadeUp>
         ))}
+      </div>
+
+      {/* Services */}
+      <div className="mt-20 sm:mt-28">
+        <FadeUp y={0}>
+          <span className="eyebrow mb-10 inline-flex">What I do</span>
+        </FadeUp>
+        <ul className="list-none">
+          {services.map((service, i) => (
+            <ServiceRow key={service.index} service={service} i={i} />
+          ))}
+        </ul>
       </div>
     </>
   );
 };
 
-export default SectionWrapper(About, "about");
+const AboutSection = SectionWrapper(About, "about");
+export default AboutSection;

@@ -1,116 +1,67 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { technologies } from "../constants";
+/* eslint-disable react/prop-types -- group shape from constants */
+import { technologies, techGroups } from "../constants";
 import { SectionWrapper } from "../hoc";
-// Removed BallCanvas (3D ) for flat icons only to keep it simple and performant across all devices .
-// If you want to add 3D icons back, you can create a new component similar to Computers.jsx and use it here instead of StaticTechIcon.
-import ErrorBoundary from "./ErrorBoundary";
-import { textVariant } from "../utils/motion";
-import { styles } from "../styles";
+import SectionHeading from "./ui/SectionHeading";
+import { FadeUp } from "./ui/Reveal";
+import Marquee from "./ui/Marquee";
 
-const StaticTechIcon = ({ icon, name }) => {
-  const [hasError, setHasError] = useState(!icon);
-  const shortName = name.slice(0, 2).toUpperCase();
-
-  return (
-    <div className="w-full h-full flex items-center justify-center rounded-full bg-white/5 border border-white/10 group-hover:border-[#915eff]/40 group-hover:bg-[#915eff]/5 transition-all duration-300 overflow-hidden">
-      {hasError ? (
-        <span className="text-white/70 text-base sm:text-lg font-semibold tracking-wide">
-          {shortName}
-        </span>
-      ) : (
-        <img
-          src={icon}
-          alt={name}
-          onError={() => setHasError(true)}
-          className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-        />
-      )}
+const TechGroup = ({ group, i }) => (
+  <FadeUp delay={i * 0.07} className="border-t hairline pt-6">
+    <div className="flex items-baseline justify-between mb-6">
+      <h3 className="font-display text-lg sm:text-xl font-medium text-paper">
+        {group.label}
+      </h3>
+      <span className="font-mono text-[10px] tracking-[0.2em] text-mute">
+        /{group.index}
+      </span>
     </div>
-  );
-};
+    <ul className="space-y-2.5 list-none">
+      {group.items.map((item) => (
+        <li
+          key={item}
+          className="group/item flex items-center gap-3 text-sm sm:text-[15px] text-mute hover:text-paper transition-colors duration-300 w-fit"
+        >
+          <span className="w-1 h-1 rounded-full bg-mute/40 group-hover/item:bg-accent transition-colors duration-300" />
+          {item}
+        </li>
+      ))}
+    </ul>
+  </FadeUp>
+);
 
 const Tech = () => {
-  const containerRef = useRef(null);
-  const itemRefs = useRef([]);
-  const [firstRowCount, setFirstRowCount] = useState(1);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const updateCount = () => {
-      requestAnimationFrame(() => {
-        const nodes = itemRefs.current.filter(Boolean);
-        if (!nodes.length) return;
-
-        const firstRowTop = nodes[0].offsetTop;
-        let count = 0;
-
-        for (const node of nodes) {
-          if (node.offsetTop !== firstRowTop) break;
-          count += 1;
-        }
-
-        setFirstRowCount(Math.max(1, count));
-      });
-    };
-
-    updateCount();
-    const observer = new ResizeObserver(updateCount);
-    observer.observe(el);
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
-      <motion.div
-        variants={textVariant()}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-      >
-        <div className="section-label mb-3">Technologies I work with</div>
-        <h2 className={styles.sectionHeadText}>Tech Stack.</h2>
-      </motion.div>
+      <SectionHeading index="03" eyebrow="Toolbox" lines={["Tech Stack"]} />
 
-      <div
-        ref={containerRef}
-        className="mt-16 flex flex-row flex-wrap justify-center gap-6 sm:gap-8 max-w-[976px] mx-auto"
-      >
-        {technologies.map((technology, index) => (
-          <motion.div
-            key={technology.name}
-            ref={(node) => {
-              itemRefs.current[index] = node;
-            }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.04 }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center gap-2 group"
-          >
-            <div className="w-20 h-20 sm:w-28 sm:h-28 relative">
-              <ErrorBoundary
-                fallback={
-                  <StaticTechIcon
-                    icon={technology.icon}
-                    name={technology.name}
-                  />
-                }
-              >
-                <StaticTechIcon icon={technology.icon} name={technology.name} />
-              </ErrorBoundary>
-            </div>
-            <p className="text-center text-xs text-secondary group-hover:text-white/80 transition-colors font-medium">
-              {technology.name}
-            </p>
-          </motion.div>
+      {/* Typographic marquee */}
+      <FadeUp y={0} delay={0.15} className="mt-14 sm:mt-20 border-y hairline">
+        <Marquee speed={50} pauseOnHover>
+          {technologies.map((tech) => (
+            <span
+              key={tech}
+              className="flex items-center shrink-0 py-4 sm:py-5"
+            >
+              <span className="font-display text-2xl sm:text-3xl font-medium uppercase text-paper/35 whitespace-nowrap px-6 sm:px-8 hover:text-paper transition-colors duration-300">
+                {tech}
+              </span>
+              <span className="text-accent/60 text-sm" aria-hidden="true">
+                ✦
+              </span>
+            </span>
+          ))}
+        </Marquee>
+      </FadeUp>
+
+      {/* Grouped stack */}
+      <div className="mt-14 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12">
+        {techGroups.map((group, i) => (
+          <TechGroup key={group.label} group={group} i={i} />
         ))}
       </div>
     </>
   );
 };
 
-export default SectionWrapper(Tech, "");
+const TechSection = SectionWrapper(Tech, "stack");
+export default TechSection;

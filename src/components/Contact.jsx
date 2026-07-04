@@ -1,205 +1,196 @@
-import React from "react";
-import { motion } from "framer-motion";
-
-import { styles } from "../styles";
-import EarthCanvas from "./canvas/Earth";
+import { useEffect, useState } from "react";
 import { SectionWrapper } from "../hoc";
-import { slideIn, fadeIn } from "../utils/motion";
-import { github, linkedin, instagram } from "../assets";
+import { siteMeta, socials } from "../constants";
+import { scrollToTop } from "../lib/lenis";
+import { RevealLines, FadeUp } from "./ui/Reveal";
+import Magnetic from "./ui/Magnetic";
 
-const socialLinks = [
-  {
-    href: "https://github.com/dhia-eddine",
-    icon: github,
-    label: "GitHub",
-    color: "hover:border-white/40",
-  },
-  {
-    href: "https://www.linkedin.com/in/dhia-eddine-mandhouj/",
-    icon: linkedin,
-    label: "LinkedIn",
-    color: "hover:border-blue-500/60",
-  },
-  {
-    href: "https://www.instagram.com/dia_mandouj/",
-    icon: instagram,
-    label: "Instagram",
-    color: "hover:border-pink-500/60",
-  },
-];
+function useLocalTime(timezone) {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const format = () =>
+      new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: timezone,
+      }).format(new Date());
+    setTime(format());
+    const t = setInterval(() => setTime(format()), 30_000);
+    return () => clearInterval(t);
+  }, [timezone]);
+  return time;
+}
+
+const ArrowIcon = () => (
+  <svg
+    width="0.5em"
+    height="0.5em"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="inline-block shrink-0 transition-transform duration-500 ease-expo group-hover:translate-x-2 group-hover:-translate-y-2"
+    aria-hidden="true"
+  >
+    <path d="M7 17L17 7M17 7H7M17 7v10" />
+  </svg>
+);
 
 const Contact = () => {
+  const time = useLocalTime(siteMeta.timezone);
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(siteMeta.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard unavailable — the mailto link still works */
+    }
+  };
+
   return (
-    <div className="xl:mt-12 flex xl:flex-row flex-col-reverse gap-10">
-      <motion.div
-        variants={slideIn("left", "tween", 0.2, 1)}
-        className="xl:flex-[0.75] w-full bg-[#0f0c24] border border-white/5 p-10 rounded-2xl relative overflow-hidden"
+    <footer>
+      <FadeUp
+        y={0}
+        className="flex items-baseline justify-between border-t hairline pt-5"
       >
-        {/* decorative glow */}
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#915eff]/8 rounded-full blur-3xl pointer-events-none" />
+        <span className="eyebrow">Contact</span>
+        <span className="font-mono text-[11px] tracking-[0.22em] text-mute">
+          /05
+        </span>
+      </FadeUp>
 
-        <div className="section-label mb-3">Get in touch</div>
-        <h3 className={`${styles.sectionHeadText} mt-1 mb-8`}>Contact.</h3>
+      <div className="mt-14 sm:mt-20">
+        <RevealLines
+          as="h2"
+          lines={["Let's build", "something great."]}
+          className="font-display font-medium text-display-xl text-paper"
+        />
 
-        {/* Email card */}
-        <a
-          href="mailto:diamandouj@gmail.com"
-          className="group flex items-center gap-4 p-4 sm:p-5 rounded-xl border border-white/5 bg-white/3 hover:border-[#915eff]/40 hover:bg-[#915eff]/5 transition-all duration-300 mb-4"
-        >
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-            style={{
-              background: "rgba(168,85,247,0.12)",
-              border: "1px solid rgba(168,85,247,0.2)",
-            }}
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="rgba(168,85,247,0.9)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="flex-shrink-0 self-center ml-[1px]"
+        <FadeUp delay={0.25} className="mt-12 sm:mt-16">
+          <div className="flex flex-wrap items-center gap-5">
+            <Magnetic strength={0.2}>
+              <a
+                href={`mailto:${siteMeta.email}`}
+                data-cursor="link"
+                className="group inline-flex items-center gap-3 font-display text-xl xs:text-2xl sm:text-4xl text-paper hover:text-accent-soft transition-colors duration-300"
+              >
+                <span className="link-sweep break-all">{siteMeta.email}</span>
+                <ArrowIcon />
+              </a>
+            </Magnetic>
+            <button
+              onClick={copyEmail}
+              className="font-mono text-[10px] tracking-[0.2em] uppercase border hairline rounded-full px-4 py-2 text-mute hover:text-paper hover:border-accent-soft/50 transition-colors duration-300"
+              aria-live="polite"
             >
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-secondary text-xs uppercase tracking-wider mb-0.5">
-              Email
-            </p>
-            <p className="text-white font-medium group-hover:text-[#dfd9ff] transition-colors text-sm sm:text-base truncate">
-              diamandouj@gmail.com
-            </p>
+        </FadeUp>
+      </div>
+
+      {/* Meta grid */}
+      <div className="mt-20 sm:mt-28 grid grid-cols-1 sm:grid-cols-3 gap-10 border-t hairline pt-10">
+        <FadeUp delay={0.05}>
+          <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute mb-4">
+            Phone
+          </p>
+          <p className="text-paper text-sm mb-3">{siteMeta.phone}</p>
+          <div className="flex gap-4">
+            <a
+              href={`tel:${siteMeta.phoneHref}`}
+              className="link-sweep font-mono text-[11px] tracking-[0.16em] uppercase text-mute hover:text-paper transition-colors"
+            >
+              Call
+            </a>
+            <a
+              href={`https://wa.me/${siteMeta.phoneHref.replace("+", "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-sweep font-mono text-[11px] tracking-[0.16em] uppercase text-mute hover:text-paper transition-colors"
+            >
+              WhatsApp
+            </a>
           </div>
+        </FadeUp>
+
+        <FadeUp delay={0.12}>
+          <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute mb-4">
+            Socials
+          </p>
+          <ul className="space-y-2 list-none">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 text-sm text-mute hover:text-paper transition-colors duration-300"
+                >
+                  <span className="link-sweep">{s.label}</span>
+                  <ArrowIcon />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </FadeUp>
+
+        <FadeUp delay={0.19}>
+          <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute mb-4">
+            Location
+          </p>
+          <p className="text-paper text-sm">{siteMeta.location}</p>
+          <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-mute tabular-nums">
+            Local time — {time} GMT+1
+          </p>
+          <div className="mt-4 flex items-center gap-2.5">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            </span>
+            <span className="text-[12px] text-mute">
+              {siteMeta.availability}
+            </span>
+          </div>
+        </FadeUp>
+      </div>
+
+      {/* Footer bar */}
+      <div className="mt-16 sm:mt-20 border-t hairline pt-6 pb-2 flex flex-wrap items-center justify-between gap-4">
+        <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-mute">
+          © 2026 {siteMeta.fullName}
+        </p>
+        <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-mute hidden sm:block">
+          Designed &amp; built with React, Three.js &amp; Tailwind
+        </p>
+        <button
+          onClick={() => scrollToTop()}
+          className="group inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.16em] uppercase text-mute hover:text-paper transition-colors"
+        >
+          Back to top
           <svg
-            className="shrink-0 text-white/20 group-hover:text-[#915eff] transition-colors"
-            width="16"
-            height="16"
+            width="12"
+            height="12"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
+            className="transition-transform duration-500 ease-expo group-hover:-translate-y-1"
           >
-            <path d="M5 12h14M12 5l7 7-7 7" />
+            <path d="M12 19V5M5 12l7-7 7 7" />
           </svg>
-        </a>
-
-        {/* Phone card */}
-        <div className="group p-4 sm:p-5 rounded-xl border border-white/5 bg-white/3 hover:border-[#915eff]/40 hover:bg-[#915eff]/5 transition-all duration-300 mb-4 sm:mb-8">
-          {/* Icon + number on same row always */}
-          <div className="flex items-center gap-4 mb-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{
-                background: "rgba(59,127,255,0.12)",
-                border: "1px solid rgba(59,127,255,0.2)",
-              }}
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="rgba(59,127,255,0.9)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="flex-shrink-0 self-center ml-[1px]"
-              >
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-secondary text-xs uppercase tracking-wider mb-0.5">
-                Phone
-              </p>
-              <p className="text-white font-medium text-sm sm:text-base">
-                +216 53368171
-              </p>
-            </div>
-          </div>
-          {/* Buttons below */}
-          <div className="flex gap-2">
-            <a
-              href="tel:+21653368171"
-              className="flex-1 px-4 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-200 flex items-center justify-center gap-2"
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-              </svg>
-              <span className="text-white/80 text-xs font-medium">Call</span>
-            </a>
-            <a
-              href="https://wa.me/21653368171"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 px-4 py-2 rounded-lg border border-[#25D366]/30 bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-all duration-200 flex items-center justify-center gap-2"
-            >
-              <svg width="14" height="14" viewBox="0 0 32 32" fill="#25D366">
-                <path d="M16 0C7.163 0 0 7.163 0 16c0 2.822.736 5.476 2.027 7.782L0 32l8.418-2.007A15.93 15.93 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 0 1-6.77-1.852l-.486-.29-5.002 1.193 1.216-4.87-.317-.5A13.267 13.267 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.27-9.778c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.63-.199-.896.199-.265.398-1.028 1.294-1.26 1.56-.232.265-.464.298-.862.1-.398-.2-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.213-2.758-.232-.398-.025-.614.174-.812.179-.178.398-.464.597-.696.2-.232.266-.398.398-.663.133-.265.067-.497-.033-.696-.1-.199-.896-2.16-1.228-2.957-.323-.776-.651-.671-.896-.683l-.763-.013c-.265 0-.696.1-1.061.497-.365.398-1.393 1.361-1.393 3.32s1.427 3.852 1.626 4.117c.2.265 2.808 4.285 6.804 6.011.951.41 1.693.655 2.272.838.954.303 1.823.26 2.51.158.766-.114 2.354-.962 2.687-1.891.332-.93.332-1.727.232-1.891-.099-.166-.365-.265-.763-.464z" />
-              </svg>
-              <span className="text-[#25D366] text-xs font-medium">
-                WhatsApp
-              </span>
-            </a>
-          </div>
-        </div>
-
-        {/* Social links */}
-        <p className="text-secondary text-sm uppercase tracking-wider mb-4">
-          Find me on
-        </p>
-        <div className="flex gap-4">
-          {socialLinks.map(({ href, icon, label, color }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center gap-3 px-5 py-3 rounded-xl border border-white/8 bg-white/3 ${color} hover:bg-white/8 transition-all duration-300 hover:scale-105`}
-            >
-              <img src={icon} alt={label} className="w-6 h-6 object-contain" />
-              <span className="text-white/80 text-sm font-medium hidden sm:block">
-                {label}
-              </span>
-            </a>
-          ))}
-        </div>
-
-        {/* Availability badge */}
-        <div className="mt-8 flex items-center gap-3">
-          <div className="relative">
-            <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-            <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-green-400 animate-ping opacity-60" />
-          </div>
-          <p className="text-secondary text-sm">Open to new opportunities</p>
-        </div>
-      </motion.div>
-
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px] min-w-0"
-      >
-        <EarthCanvas />
-      </motion.div>
-    </div>
+        </button>
+      </div>
+    </footer>
   );
 };
 
-export default SectionWrapper(Contact, "contact");
+const ContactSection = SectionWrapper(Contact, "contact");
+export default ContactSection;

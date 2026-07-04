@@ -1,262 +1,238 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { styles } from "../styles";
-import { navLinks } from "../constants";
-import { logo } from "../assets";
+import { navLinks, siteMeta, socials } from "../constants";
+import { scrollToId, scrollToTop, getLenis } from "../lib/lenis";
+import { EASE } from "../utils/motion";
 
-const HamburgerIcon = ({ open }) => (
-  <span className="relative w-[22px] h-[22px] block">
-    {/* Hamburger lines */}
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="absolute inset-0 transition-all duration-300"
-      style={{
-        opacity: open ? 0 : 1,
-        transform: open ? "rotate(90deg) scale(0.7)" : "rotate(0deg) scale(1)",
-      }}
-    >
-      <path d="M3 12h18M3 6h18M3 18h18" />
-    </svg>
-    {/* Close X */}
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="absolute inset-0 transition-all duration-300"
-      style={{
-        opacity: open ? 1 : 0,
-        transform: open ? "rotate(0deg) scale(1)" : "rotate(-90deg) scale(0.7)",
-      }}
-    >
-      <path d="M18 6L6 18M6 6l12 12" />
-    </svg>
-  </span>
-);
+const menuPanel = {
+  closed: { y: "-100%" },
+  open: { y: "0%" },
+};
 
 const Navbar = () => {
-  const [active, setActive] = useState("");
-  const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const lastY = useRef(0);
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === "/";
 
+  // Hide on scroll down, reveal on scroll up
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      if (!open) setHidden(y > 140 && y > lastY.current);
+      lastY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [open]);
 
+  // Lock scroll while menu is open
   useEffect(() => {
-    if (toggle) {
+    const lenis = getLenis();
+    if (open) {
+      lenis?.stop();
       document.body.style.overflow = "hidden";
     } else {
+      lenis?.start();
       document.body.style.overflow = "";
     }
     return () => {
+      lenis?.start();
       document.body.style.overflow = "";
     };
-  }, [toggle]);
+  }, [open]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const handleNavClick = (link) => {
-    setActive(link.title);
-    setToggle(false);
+    setOpen(false);
     if (isHome) {
-      const el = document.getElementById(link.id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      // Wait a tick so the menu starts closing before the scroll begins
+      setTimeout(() => scrollToId(link.id), open ? 350 : 0);
     } else {
       navigate({ pathname: "/", hash: `#${link.id}` });
     }
   };
 
+  const handleLogoClick = () => {
+    setOpen(false);
+    if (isHome) scrollToTop();
+  };
+
   return (
     <>
-      <nav
-        className={`${
-          styles.paddingX
-        } w-full flex items-center py-4 fixed top-0 z-30 transition-all duration-500 ${
-          scrolled || !isHome
-            ? "glass border-b border-white/5 shadow-lg shadow-black/30"
-            : "bg-transparent"
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+
+      <motion.header
+        className={`fixed top-0 left-0 right-0 z-[100] transition-colors duration-500 ${
+          scrolled && !open
+            ? "bg-ink/80 backdrop-blur-md border-b hairline"
+            : "bg-transparent border-b border-transparent"
         }`}
+        animate={{ y: hidden ? "-100%" : "0%" }}
+        transition={{ duration: 0.5, ease: EASE }}
       >
-        <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
-          {/* Logo */}
+        <nav
+          className={`${styles.paddingX} max-w-[1680px] mx-auto flex items-center justify-between h-16 sm:h-20`}
+          aria-label="Primary"
+        >
           <Link
             to="/"
-            className="flex items-center gap-3 group"
-            onClick={() => {
-              setActive("");
-              setToggle(false);
-              window.scrollTo(0, 0);
-            }}
+            onClick={handleLogoClick}
+            className="group flex items-baseline gap-2 relative z-[110]"
           >
-            <div className="w-9 h-9 rounded-full bg-[#915eff]/20 flex items-center justify-center ring-1 ring-[#915eff]/40 group-hover:ring-[#915eff] transition-all duration-300">
-              <img src={logo} alt="logo" className="w-6 h-6 object-contain" />
-            </div>
-            <p className="text-white text-[16px] font-bold cursor-pointer flex items-center">
+            <span className="font-display text-lg sm:text-xl font-medium tracking-tight text-paper">
               Dhia Mandhouj
-              <span className="sm:block hidden ml-2 text-secondary font-normal">
-                |{" "}
-                <span className="violet-text-gradient font-semibold">
-                  Developer
-                </span>
-              </span>
-            </p>
+            </span>
+            <span className="hidden sm:inline font-mono text-[10px] tracking-[0.2em] uppercase text-mute group-hover:text-accent-soft transition-colors duration-300">
+              — Full-Stack Dev
+            </span>
           </Link>
 
-          {/* Desktop nav */}
-          <ul className="list-none hidden sm:flex flex-row gap-8 items-center">
+          {/* Desktop links */}
+          <ul className="hidden md:flex items-center gap-9 list-none">
             {!isHome && (
               <li>
                 <Link
                   to="/"
-                  className="flex items-center gap-1.5 text-secondary hover:text-white text-[15px] font-medium transition-colors duration-200"
-                  onClick={() => setActive("")}
+                  className="link-sweep font-mono text-[12px] tracking-[0.18em] uppercase text-mute hover:text-paper transition-colors duration-300"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 12H5M12 5l-7 7 7 7" />
-                  </svg>
-                  Home
+                  ← Home
                 </Link>
               </li>
             )}
             {navLinks.map((link) => (
-              <li
-                key={link.id}
-                className={`relative text-[15px] font-medium cursor-pointer transition-colors duration-200 ${
-                  active === link.title
-                    ? "text-white nav-link-active"
-                    : "text-secondary hover:text-white"
-                }`}
-                onClick={() => handleNavClick(link)}
-              >
-                <span>{link.title}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Mobile hamburger button */}
-          <button
-            className="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-[#915eff]/40 transition-all duration-200 z-40"
-            onClick={() => setToggle(!toggle)}
-            aria-label="Toggle menu"
-          >
-            <HamburgerIcon open={toggle} />
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile full-screen overlay menu */}
-      <div
-        className={`sm:hidden fixed inset-0 z-20 transition-all duration-300 ${
-          toggle
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        style={{
-          backdropFilter: "blur(16px)",
-          backgroundColor: "rgba(5,8,22,0.95)",
-        }}
-        onClick={() => setToggle(false)}
-      >
-        {/* Menu content */}
-        <div
-          className={`flex flex-col h-full pt-24 pb-10 px-8 transition-all duration-300 ${
-            toggle ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
-          }`}
-        >
-          {/* Nav links */}
-          <ul className="flex flex-col gap-2 flex-1">
-            {!isHome && (
-              <li>
-                <Link
-                  to="/"
-                  className="flex items-center gap-3 text-secondary text-[18px] font-medium py-4 px-4 rounded-2xl hover:bg-white/5 hover:text-white transition-all duration-200 border border-transparent hover:border-white/10"
-                  onClick={() => {
-                    setToggle(false);
-                    setActive("");
-                  }}
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M19 12H5M12 5l-7 7 7 7" />
-                  </svg>
-                  Home
-                </Link>
-              </li>
-            )}
-            {navLinks.map((link, index) => (
               <li key={link.id}>
                 <button
-                  className={`w-full text-left flex items-center gap-4 text-[18px] font-semibold py-4 px-4 rounded-2xl transition-all duration-200 border ${
-                    active === link.title
-                      ? "text-white bg-[#915eff]/10 border-[#915eff]/30"
-                      : "text-secondary hover:text-white hover:bg-white/5 border-transparent hover:border-white/10"
-                  }`}
                   onClick={() => handleNavClick(link)}
+                  className="link-sweep font-mono text-[12px] tracking-[0.18em] uppercase text-mute hover:text-paper transition-colors duration-300"
                 >
-                  <span
-                    className="w-8 h-8 rounded-xl flex items-center justify-center text-sm font-bold"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #915eff22, #2563eb22)",
-                      border: "1px solid rgba(145,94,255,0.2)",
-                    }}
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+                  <span className="text-accent-soft/70 mr-1.5">{link.index}</span>
                   {link.title}
                 </button>
               </li>
             ))}
           </ul>
 
-          {/* Bottom section */}
-          <div className="mt-auto pt-8 border-t border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#915eff]/20 flex items-center justify-center ring-1 ring-[#915eff]/40">
-                <img src={logo} alt="logo" className="w-6 h-6 object-contain" />
-              </div>
-              <div>
-                <p className="text-white text-sm font-bold">Dhia Mandhouj</p>
-                <p className="text-[#915eff] text-xs font-semibold">
-                  Developer
-                </p>
-              </div>
+          {/* Menu toggle (mobile) */}
+          <button
+            className="md:hidden relative z-[110] flex items-center gap-3 group"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-label={open ? "Close menu" : "Open menu"}
+          >
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-mute group-hover:text-paper transition-colors">
+              {open ? "Close" : "Menu"}
+            </span>
+            <span className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px]">
+              <span
+                className="block w-6 h-px bg-paper transition-transform duration-500 ease-expo"
+                style={{
+                  transform: open
+                    ? "translateY(3px) rotate(45deg)"
+                    : "none",
+                }}
+              />
+              <span
+                className="block w-6 h-px bg-paper transition-transform duration-500 ease-expo"
+                style={{
+                  transform: open
+                    ? "translateY(-3px) rotate(-45deg)"
+                    : "none",
+                }}
+              />
+            </span>
+          </button>
+        </nav>
+      </motion.header>
+
+      {/* Full-screen menu (mobile) */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            className="fixed inset-0 z-[105] bg-ink-800 md:hidden flex flex-col"
+            variants={menuPanel}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            transition={{ duration: 0.7, ease: EASE }}
+          >
+            <div className={`${styles.paddingX} flex-1 flex flex-col justify-center`}>
+              <span className="eyebrow mb-8">Navigation</span>
+              <ul className="flex flex-col list-none">
+                {navLinks.map((link, i) => (
+                  <li key={link.id} className="border-b hairline">
+                    <motion.button
+                      initial={{ y: 40, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{
+                        duration: 0.7,
+                        ease: EASE,
+                        delay: 0.25 + i * 0.06,
+                      }}
+                      onClick={() => handleNavClick(link)}
+                      className="w-full flex items-baseline gap-4 py-4 text-left group"
+                    >
+                      <span className="font-mono text-[11px] text-accent-soft/80">
+                        {link.index}
+                      </span>
+                      <span className="font-display text-4xl xs:text-5xl font-medium text-paper group-active:text-accent-soft transition-colors">
+                        {link.title}
+                      </span>
+                    </motion.button>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        </div>
-      </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className={`${styles.paddingX} pb-10 flex flex-wrap items-end justify-between gap-6`}
+            >
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute mb-2">
+                  Get in touch
+                </p>
+                <a
+                  href={`mailto:${siteMeta.email}`}
+                  className="text-paper text-sm link-sweep"
+                >
+                  {siteMeta.email}
+                </a>
+              </div>
+              <div className="flex gap-5">
+                {socials.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-[11px] tracking-[0.16em] uppercase text-mute hover:text-paper transition-colors"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

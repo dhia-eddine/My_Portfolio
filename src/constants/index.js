@@ -1,30 +1,9 @@
 import {
-  frontend,
-  backend,
-  web,
-  javascript,
-  typescript,
-  html,
-  css,
-  reactjs,
-  sql,
-  tailwind,
-  nodejs,
-  mongodb,
-  git,
-  adobexd,
-  java,
   enova,
   irontech,
   iron_school,
   logo,
-  threejs,
-  angular,
-  django,
-  python,
-  nestjs,
   proxicon,
-  ironSchoolOg,
   ironSchoolIntro,
   ironSchoolAdmin1,
   ironSchoolAdmin2,
@@ -60,115 +39,119 @@ import {
   auth1,
   pdf1,
   reportPdf,
-  nx,
 } from "../assets";
 
+export const siteMeta = {
+  firstName: "Dhia",
+  lastName: "Mandhouj",
+  fullName: "Dhia Eddine Mandhouj",
+  role: "Full-Stack Developer",
+  location: "Tunisia",
+  timezone: "Africa/Tunis",
+  email: "diamandouj@gmail.com",
+  phone: "+216 53 368 171",
+  phoneHref: "+21653368171",
+  availability: "Open to new opportunities",
+};
+
+export const socials = [
+  { label: "GitHub", href: "https://github.com/dhia-eddine" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/dhia-eddine-mandhouj/" },
+  { label: "Instagram", href: "https://www.instagram.com/dia_mandouj/" },
+];
+
 export const navLinks = [
-  {
-    id: "about",
-    title: "About",
-  },
-  {
-    id: "Experience",
-    title: "Experience",
-  },
-  {
-    id: "work",
-    title: "Work",
-  },
-  {
-    id: "contact",
-    title: "Contact",
-  },
+  { id: "about", title: "About", index: "01" },
+  { id: "experience", title: "Experience", index: "02" },
+  { id: "stack", title: "Stack", index: "03" },
+  { id: "work", title: "Work", index: "04" },
+  { id: "contact", title: "Contact", index: "05" },
 ];
 
 const services = [
   {
-    title: "Web Developer",
-    icon: web,
+    index: "01",
+    title: "Full-Stack Development",
+    description:
+      "End-to-end web platforms — from data model and API design to polished, production-ready interfaces.",
+    keywords: ["NestJS", "PostgreSQL", "React", "Prisma"],
   },
   {
-    title: "Frontend Developer",
-    icon: frontend,
+    index: "02",
+    title: "Frontend Engineering",
+    description:
+      "Responsive, animated interfaces with careful attention to performance, detail, and interaction.",
+    keywords: ["React", "Next.js", "Tailwind", "Three.js"],
   },
   {
-    title: "Backend Developer",
-    icon: backend,
+    index: "03",
+    title: "Backend & APIs",
+    description:
+      "Secure REST APIs, role-based access control, real-time WebSockets, and automated testing.",
+    keywords: ["NestJS", "Python", "WebSockets", "JWT"],
   },
 ];
 
+const stats = [
+  { value: "2022", label: "Working since" },
+  { value: "06", label: "Roles & internships" },
+  { value: "02", label: "Featured case studies" },
+  { value: "15+", label: "Technologies in play" },
+];
+
+// Names cycled through the scrolling tech marquee
 const technologies = [
-  {
-    name: "ANGULAR",
-    icon: angular,
-  },
-  {
-    name: "NESTJS",
-    icon: nestjs,
-  },
-  {
-    name: "django",
-    icon: django,
-  },
-  {
-    name: "Tailwind CSS",
-    icon: tailwind,
-  },
+  "React",
+  "TypeScript",
+  "NestJS",
+  "Next.js",
+  "Angular",
+  "Django",
+  "Tailwind CSS",
+  "Three.js",
+  "Node.js",
+  "PostgreSQL",
+  "MongoDB",
+  "Python",
+  "Java",
+];
 
+// Grouped, typographic view of the stack
+const techGroups = [
   {
-    name: "React JS",
-    icon: reactjs,
+    index: "01",
+    label: "Frontend",
+    items: [
+      "React",
+      "Next.js",
+      "Angular",
+      "TypeScript",
+      "Tailwind CSS",
+      "Three.js",
+      "React Native",
+    ],
   },
   {
-    name: "TypeScript",
-    icon: typescript,
+    index: "02",
+    label: "Backend",
+    items: ["NestJS", "Node.js", "Django", "Spring Boot", "Python", "Java"],
   },
   {
-    name: "Three JS",
-    icon: threejs,
+    index: "03",
+    label: "Data & Infra",
+    items: ["PostgreSQL", "MongoDB", "Prisma ORM", "Docker", "NX Monorepos", "Git"],
   },
   {
-    name: "JavaScript",
-    icon: javascript,
-  },
-  {
-    name: "CSS 3",
-    icon: css,
-  },
-
-  {
-    name: "sql",
-    icon: sql,
-  },
-  {
-    name: "NX Monorepos",
-    icon: nx,
-  },
-
-  {
-    name: "Node JS",
-    icon: nodejs,
-  },
-  {
-    name: "MongoDB",
-    icon: mongodb,
-  },
-
-  {
-    name: "git",
-    icon: git,
-  },
-  {
-    name: "java",
-    icon: java,
-  },
-  {
-    name: "python",
-    icon: python,
-  },
-  {
-    name: "HTML 5",
-    icon: html,
+    index: "04",
+    label: "Practices",
+    items: [
+      "REST API Design",
+      "WebSockets",
+      "RBAC & JWT Auth",
+      "E2E Testing",
+      "Agile Scrum",
+      "Code Review",
+    ],
   },
 ];
 
@@ -177,122 +160,105 @@ const experiences = [
     title: "Full Stack Developer",
     company_name: "Moonify-Tech",
     icon: iron_school,
-    iconBg: "#383E56",
-    date: "01/2026 – Present",
-    key_q: "Key Qualifications",
+    date: "Jan 2026 — Present",
     points: [
-      "Developing a payroll management system for Iron School platform, designing and implementing employee contracts, payslip generation, and payment tracking modules with full-stack solutions using Prisma ORM, PostgreSQL, NestJS, React.",
-      "Performed ongoing maintenance, bug fixes, and feature development across a multi-platform monorepo (NestJS backend, React admin panel, React Native mobile app).",
-      "Wroteandmaintained integration and end-to-end tests across full-stack components to ensure system reliability and data integrity.",
-      "Architected RESTful API endpoints following NestJS best practices with role-based access control (RBAC), and built responsive admin interfaces using React.",
+      "Developing a payroll management system for the Iron School platform — employee contracts, payslip generation, and payment tracking — using Prisma ORM, PostgreSQL, NestJS, and React.",
+      "Ongoing maintenance, bug fixes, and feature development across a multi-platform monorepo (NestJS backend, React admin panel, React Native mobile app).",
+      "Wrote and maintained integration and end-to-end tests across full-stack components to ensure system reliability and data integrity.",
+      "Architected RESTful API endpoints following NestJS best practices with role-based access control (RBAC), and built responsive admin interfaces in React.",
     ],
     project_d:
-      "Iron School streamlines every aspect of school administration. From student management to parent communication, handle it all in one powerful platform.",
+      "Iron School streamlines every aspect of school administration — from student management to parent communication — in one powerful platform.",
   },
   {
     title: "Full Stack Developer",
-    company_name: "Enova ROBOCTICS ",
+    company_name: "Enova Robotics",
     icon: enova,
-    iconBg: "#E6DEDD" /*"#383E56"*/,
-    date: "february 2025 - june 2025",
-    key_q: "Key Qualifications",
+    date: "Feb 2025 — Jun 2025",
     points: [
-      "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
+      "Developed a responsive web-based control application for the UR10e collaborative robot.",
       "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
-      "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
-      "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
-      "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+      "Engineered an intuitive interface using Next.js, React, Tailwind CSS, and Three.js for seamless remote robot operation.",
+      "Integrated NestJS, Python, and WebSockets on the backend for reliable industrial automation workflows.",
+      "Strengthened security and quality with JWT authentication and automated testing (Selenium, Cucumber).",
     ],
     project_d:
-      "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+      "A web control center for the UR10e cobot: real-time monitoring, 3D trajectory visualization, and multi-user management on a secure WebSocket backend.",
   },
   {
-    title: "Backend developer",
-    company_name: "proxym",
+    title: "Backend Developer",
+    company_name: "Proxym",
     icon: proxicon,
-    iconBg: "#383E56" /*"#383E56"*/,
-    date: "september 2024 - octobre 2024",
-    key_q: "Key Qualifications",
+    date: "Sep 2024 — Oct 2024",
     points: [
-      "Developed a responsive and user-friendly web-based control application for the UR10e collaborative robot.",
-      "Implemented real-time robot monitoring, 3D trajectory visualization, and multi-user management.",
-      "Engineered an intuitive interface using Next.js, React.js, TailwindCSS, and Three.js for seamless remote robot operation.",
-      "Integrated robust backend technologies including NestJS, Python, and WebSockets to ensure reliable industrial automation workflows.",
-      "Enhanced system security and performance through JWT authentication and automated testing with Selenium and Cucumber.",
+      "Developed a data processing application using Spring Boot and Spring Batch for efficient handling of large datasets.",
+      "Configured CSV processing pipelines to ensure robust batch execution and data integrity.",
+      "Integrated REST APIs and PostgreSQL to support dynamic and reliable backend operations.",
+      "Collaborated in a team environment using Docker and GitHub for versioning and deployment workflows.",
     ],
     project_d:
-      "Developed a responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, multi-user management, and a modern interface built with Next.js, React.js, TailwindCSS, and Three.js, supported by a secure and reliable backend using NestJS, Python, WebSockets, and JWT authentication.",
+      "A scalable batch data-processing service built on Spring Boot, Spring Batch, and PostgreSQL.",
   },
   {
-    title: "Full Stack",
-    company_name: " ",
+    title: "Full Stack Developer",
+    company_name: "Freelance",
     icon: logo,
-    iconBg: "#E6DEDD" /*"#383E56"*/,
-    date: "Mars 2024 - May 2024",
-    key_q: "Key Qualifications",
+    date: "Mar 2024 — May 2024",
     points: [
       "Developed a data processing application using Spring Boot and Spring Batch for efficient handling of large datasets.",
       "Configured CSV processing pipelines to ensure robust batch execution and data integrity.",
       "Integrated REST APIs and PostgreSQL to support dynamic and reliable backend operations.",
       "Applied clean coding standards and best practices throughout the development process.",
-      "Collaborated within a team environment while using Docker for containerization and GitHub for streamlined version control and deployment workflows.",
     ],
     project_d:
-      "Developed a scalable data processing application using Spring Boot and Spring Batch, enabling efficient CSV configuration, robust batch execution, REST API integration, and PostgreSQL-based data operations, while leveraging Docker and GitHub to optimize deployment workflows and maintain system reliability.",
+      "A scalable data-processing application enabling CSV configuration, robust batch execution, and PostgreSQL-based operations.",
   },
-
   {
-    title: "Backend developer",
-    company_name: "IRON TECH",
+    title: "Backend Developer",
+    company_name: "Iron Tech",
     icon: irontech,
-    iconBg: "#383E56" /*"#383E56"*/,
-    date: "July 2023 - August 2023",
-    key_q: "Key Qualifications",
+    date: "Jul 2023 — Aug 2023",
     points: [
-      "Developed a job assessment platform with a powerful backend infrastructure.",
+      "Developed a job assessment platform with a robust backend infrastructure.",
       "Facilitated seamless assessment tests and comprehensive administrative capabilities.",
-      "Apply adapter design pattern.",
-      "Followed Agile Scrum methodology for project management and collaboration.",
-      "Participating in code reviews and providing constructive feedback to other developers.",
+      "Applied the adapter design pattern and followed Agile Scrum for project management.",
+      "Participated in code reviews, providing constructive feedback to other developers.",
     ],
     project_d:
-      "Engineered a job assessment platform with a robust backend infrastructure, enabling streamlined assessment tests and administrative capabilities.",
+      "A job assessment platform enabling streamlined assessment tests and administration.",
   },
   {
     title: "Web Developer",
-    company_name: "Enova ROBOCTICS",
+    company_name: "Enova Robotics",
     icon: enova,
-    iconBg: "#E6DEDD" /*"#383E56"*/,
-    date: "February 2022 - june 2022",
-    key_q: "Key Qualifications",
+    date: "Feb 2022 — Jun 2022",
     points: [
-      "Project initiation and planning.",
-      "Developing and maintaining web applications using Angular, Django and other related technologies.",
-      "Define application constants: colors, margins, paddings, border radius and sizes.",
-      "Apply adapter design pattern.",
-      "Implementing responsive design and ensuring cross-browser compatibility.",
-      "Add google map developer SDK",
-      "Consume APIs",
-      "Implementing a forgot password",
-      "Participating in code reviews and providing constructive feedback to other developers.",
+      "Built and maintained web applications using Angular and Django.",
+      "Defined application constants — colors, spacing, radius, and sizes — for a consistent design system.",
+      "Implemented responsive design, cross-browser compatibility, and Google Maps SDK integration.",
+      "Consumed REST APIs and implemented a forgot-password flow.",
     ],
     project_d:
-      "Development of a Monitoring Dashboard for P-Guard (security robot), featuring the ability to monitor a selected robot and generate reports on-demand using a laptop or mobile device.",
+      "A monitoring dashboard for P-Guard (security robot) with on-demand reporting from laptop or mobile.",
   },
 ];
 
 const projects = [
   {
     id: "iron-school",
-    name: "Iron School – School Management Platform",
+    index: "01",
+    name: "Iron School",
+    tagline: "School Management Platform",
+    year: "2026",
+    role: "Full-Stack Development",
     description:
       "Iron School streamlines every aspect of school administration — from student management and parent communication to payroll, employee contracts, and payment tracking — all in one powerful platform. Built with NestJS, PostgreSQL, Prisma ORM, React, and React Native.",
     tags: [
-      { name: "NestJS", color: "green-text-gradient" },
-      { name: "React", color: "blue-text-gradient" },
-      { name: "React Native", color: "blue-text-gradient" },
-      { name: "PostgreSQL", color: "pink-text-gradient" },
-      { name: "Prisma", color: "pink-text-gradient" },
+      { name: "NestJS" },
+      { name: "React" },
+      { name: "React Native" },
+      { name: "PostgreSQL" },
+      { name: "Prisma" },
     ],
     image: ironSchoolAdmin1,
     gallery: [
@@ -322,15 +288,19 @@ const projects = [
   },
   {
     id: "enova-robotics-cobot",
-    name: "Enova Robotics – UR10e Cobot Control",
+    index: "02",
+    name: "UR10e Cobot Control",
+    tagline: "Industrial Robot Interface",
+    year: "2025",
+    role: "Full-Stack Development",
     description:
-      "Responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, and multi-user management. Built with Next.js, React.js, TailwindCSS, and Three.js on the frontend, with a secure backend using NestJS, Python, WebSockets, and JWT authentication.",
+      "Responsive web-based control application for the UR10e collaborative robot, featuring real-time monitoring, 3D trajectory visualization, and multi-user management. Built with Next.js, React, Tailwind CSS, and Three.js on the frontend, with a secure backend using NestJS, Python, WebSockets, and JWT authentication.",
     tags: [
-      { name: "Next.js", color: "blue-text-gradient" },
-      { name: "React", color: "blue-text-gradient" },
-      { name: "NestJS", color: "green-text-gradient" },
-      { name: "Three.js", color: "pink-text-gradient" },
-      { name: "Tailwind", color: "pink-text-gradient" },
+      { name: "Next.js" },
+      { name: "React" },
+      { name: "NestJS" },
+      { name: "Three.js" },
+      { name: "Tailwind" },
     ],
     image: cobotSim,
     gallery: [
@@ -353,4 +323,4 @@ const projects = [
   },
 ];
 
-export { services, technologies, experiences, projects };
+export { services, stats, technologies, techGroups, experiences, projects };
