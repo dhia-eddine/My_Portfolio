@@ -1,236 +1,219 @@
-import { motion } from "framer-motion";
-import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { lazy, Suspense, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { styles } from "../styles";
+import { siteMeta } from "../constants";
+import { EASE } from "../utils/motion";
+import { useLoad } from "../lib/LoadContext";
+import { scrollToId } from "../lib/lenis";
+import Magnetic from "./ui/Magnetic";
 import ErrorBoundary from "./ErrorBoundary";
+import portrait from "../assets/dia_head.png";
 
-const BusinessmanCanvas = lazy(() => import("./canvas/Businessman"));
+const ParticleField = lazy(() => import("./canvas/ParticleField"));
 
-const COMPUTER_LOAD_TIMEOUT_MS = 8000;
+const lineVariants = {
+  hidden: { y: "110%" },
+  show: (delay) => ({
+    y: "0%",
+    transition: { duration: 1.1, ease: EASE, delay },
+  }),
+};
 
-const ROLES = [
-  "Full Stack Developer",
-  "Frontend Engineer",
-  "Backend Architect",
-  "UI/UX Enthusiast",
-];
+const fadeVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: (delay) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: EASE, delay },
+  }),
+};
 
-function useTypewriter(words, speed = 80, pause = 1800) {
-  const [idx, setIdx] = useState(0);
-  const [text, setText] = useState("");
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const current = words[idx % words.length];
-    let timeout;
-    if (!deleting && text === current) {
-      timeout = setTimeout(() => setDeleting(true), pause);
-    } else if (deleting && text === "") {
-      setDeleting(false);
-      setIdx((i) => (i + 1) % words.length);
-    } else {
-      timeout = setTimeout(
-        () => {
-          setText(
-            deleting
-              ? current.slice(0, text.length - 1)
-              : current.slice(0, text.length + 1),
-          );
-        },
-        deleting ? speed / 2 : speed,
-      );
-    }
-    return () => clearTimeout(timeout);
-  }, [text, deleting, idx, words, speed, pause]);
-
-  return text;
-}
-
-function ComputerFallback() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] rounded-2xl bg-primary/20" />
-    </div>
-  );
-}
+const portraitVariants = {
+  hidden: { opacity: 0, y: 32, scale: 0.96 },
+  show: (delay) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 1.05, ease: EASE, delay },
+  }),
+};
 
 const Hero = () => {
-  const [loaded, setLoaded] = useState(false);
-  const [showFallback, setShowFallback] = useState(false);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const role = useTypewriter(ROLES);
+  const { ready } = useLoad();
+  const sectionRef = useRef(null);
 
-  const onLoaded = useCallback(() => setLoaded(true), []);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      if (!loaded) setShowFallback(true);
-    }, COMPUTER_LOAD_TIMEOUT_MS);
-    return () => clearTimeout(t);
-  }, [loaded]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 639px)");
-    const update = () => setIsMobileViewport(mediaQuery.matches);
-    update();
-    mediaQuery.addEventListener("change", update);
-    return () => mediaQuery.removeEventListener("change", update);
-  }, []);
+  const anim = ready ? "show" : "hidden";
 
   return (
-    <section className="relative w-full h-screen mx-auto overflow-hidden">
-      {/* Background radial glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#915eff]/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 right-1/4 w-64 h-64 bg-blue-600/8 rounded-full blur-3xl" />
+    <section
+      ref={sectionRef}
+      className="relative w-full min-h-[100svh] flex flex-col overflow-hidden"
+    >
+      {/* Three.js particle dunes — horizon under the typography */}
+      <div className="absolute inset-x-0 bottom-0 h-[68%] pointer-events-none">
+        <ErrorBoundary fallback={null}>
+          <Suspense fallback={null}>
+            <ParticleField className="w-full h-full" />
+          </Suspense>
+        </ErrorBoundary>
+        {/* Soft floor fade so particles melt into the page */}
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-ink to-transparent" />
       </div>
 
-      <div
-        className={`${styles.paddingX} absolute inset-0 top-[110px] max-w-7xl mx-auto flex flex-row items-start gap-5 z-10 pointer-events-none`}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className={`${styles.paddingX} relative z-10 max-w-[1680px] mx-auto w-full min-h-[100svh] flex flex-col justify-between gap-[clamp(1.5rem,4vh,3.5rem)] pb-5 pt-24 sm:pt-28 lg:pt-20`}
       >
-        {/* Accent line */}
-        <div className="flex flex-col justify-center items-center mt-5">
-          <div className="relative w-5 h-5">
-            <div className="w-5 h-5 rounded-full bg-[#915eff] pulse-ring" />
-          </div>
-          <div
-            className="w-1 sm:h-80 h-40"
-            style={{
-              background:
-                "linear-gradient(to bottom, #915eff 0%, transparent 100%)",
-            }}
-          />{" "}
-        </div>
-
-        <div className="mt-2">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="section-label mb-2">Welcome to my portfolio</div>
-            <h1 className={`${styles.heroHeadText} text-white`}>
-              Hi, I&apos;m{" "}
-              <span
-                style={{
-                  background:
-                    "linear-gradient(135deg, #915eff 0%, #2563eb 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
+        {/* Identity + portrait */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          <h1 className={`${styles.heroHeadText} lg:col-span-7`}>
+            <span className="mask-line">
+              <motion.span
+                className="block will-change-transform"
+                variants={lineVariants}
+                custom={0.25}
+                initial="hidden"
+                animate={anim}
               >
-                Dhia
-              </span>
-            </h1>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <p className={`${styles.heroSubText} mt-3 text-[#dfd9ff]`}>
-              I develop{" "}
-              <span className="typewriter-cursor text-white font-semibold">
-                {role}
-              </span>
-            </p>
-            <p className="mt-3 text-secondary text-[14px] sm:text-[16px] max-w-md leading-relaxed">
-              Passionate about building elegant, performant web applications and
-              crafting seamless user experiences.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-8 flex gap-4 flex-wrap pointer-events-auto"
-          >
-            <a
-              href="#about"
-              className="px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
-              style={{
-                background: "linear-gradient(135deg, #915eff, #2563eb)",
-                boxShadow: "0 4px 24px rgba(145,94,255,0.3)",
-              }}
-            >
-              About Me
-            </a>
-            <a
-              href="#work"
-              className="px-6 py-3 rounded-xl font-semibold text-white text-sm border border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:border-[#915eff]/50 transition-all duration-300 hover:scale-105"
-            >
-              View Projects
-            </a>
-          </motion.div>
-
-          {/* Mobile computer: sits directly under buttons */}
-          {isMobileViewport && (
-            <div className="relative mt-6 w-full h-[360px] xs:h-[400px] sm:hidden pointer-events-auto">
-              {!showFallback && (
-                <ErrorBoundary fallback={null}>
-                  <Suspense fallback={null}>
-                    <div className="absolute inset-0 flex items-start justify-center pt-1 pointer-events-none">
-                      <div className="w-[380px] h-[380px] xs:w-[420px] xs:h-[420px] pointer-events-auto">
-                        <BusinessmanCanvas onLoaded={onLoaded} />
-                      </div>
-                    </div>
-                  </Suspense>
-                </ErrorBoundary>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* 3D computer — centered */}
-      {!isMobileViewport && (
-        <div className="hidden sm:block">
-          <ComputerFallback />
-          {!showFallback && (
-            <ErrorBoundary fallback={null}>
-              <Suspense fallback={null}>
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-[520px] h-[520px] sm:w-[620px] sm:h-[620px] pointer-events-auto">
-                    <BusinessmanCanvas onLoaded={onLoaded} />
-                  </div>
-                </div>
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </div>
-      )}
-
-      {/* Scroll indicator */}
-      <div className="absolute xs:bottom-10 bottom-8 w-full flex justify-center items-center z-10">
-        <a
-          href="#about"
-          aria-label="Scroll down"
-          className="pointer-events-auto"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, repeatType: "loop" }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-secondary text-xs tracking-widest uppercase">
-              Scroll
+                Dhia <span className="text-stroke">Eddine</span>
+              </motion.span>
             </span>
-            <div className="w-[30px] h-[50px] rounded-3xl border-2 border-secondary/40 flex justify-center items-start p-2">
-              <motion.div
-                animate={{ y: [0, 14, 0] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                }}
-                className="w-2 h-2 rounded-full bg-[#915eff]"
+            <span className="mask-line">
+              <motion.span
+                className="block will-change-transform"
+                variants={lineVariants}
+                custom={0.37}
+                initial="hidden"
+                animate={anim}
+              >
+                Mandhouj<span className="text-accent">.</span>
+              </motion.span>
+            </span>
+          </h1>
+
+          <motion.div
+            variants={portraitVariants}
+            custom={0.48}
+            initial="hidden"
+            animate={anim}
+            className="lg:col-span-5 lg:col-start-8 flex justify-center lg:justify-end"
+          >
+            <div className="relative w-full max-w-[200px] xs:max-w-[240px] sm:max-w-[280px] lg:max-w-[320px] xl:max-w-[360px]">
+              <div
+                className="absolute top-3 left-3 -right-3 -bottom-3 rounded-lg border hairline pointer-events-none hidden sm:block"
+                aria-hidden="true"
               />
+              <div className="relative overflow-hidden rounded-lg border hairline bg-ink-700 shadow-[0_24px_80px_-20px_rgba(135,87,255,0.22)]">
+                <img
+                  src={portrait}
+                  alt="Dhia Eddine Mandhouj"
+                  width={720}
+                  height={720}
+                  decoding="async"
+                  className="w-full aspect-square object-cover object-[center_12%]"
+                />
+                <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-ink via-ink/60 to-transparent pointer-events-none" />
+                <div className="absolute top-0 left-0 h-full w-px bg-accent/40" aria-hidden="true" />
+              </div>
             </div>
           </motion.div>
-        </a>
-      </div>
+        </div>
+
+        {/* Statement + CTAs */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <motion.div
+            variants={fadeVariants}
+            custom={0.55}
+            initial="hidden"
+            animate={anim}
+            className="lg:col-span-5"
+          >
+            <p className="eyebrow mb-4">{siteMeta.role}</p>
+            <p className="text-mute text-base sm:text-lg leading-relaxed max-w-md">
+              I build elegant, performant web applications — from robust{" "}
+              <span className="text-paper">NestJS backends</span> to immersive{" "}
+              <span className="text-paper">React &amp; Three.js frontends</span>.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeVariants}
+            custom={0.68}
+            initial="hidden"
+            animate={anim}
+            className="lg:col-span-7 flex flex-wrap items-center gap-6 lg:justify-end"
+          >
+            <Magnetic>
+              <button
+                onClick={() => scrollToId("work")}
+                data-cursor="link"
+                className="group inline-flex items-center gap-3 rounded-full bg-paper text-ink px-7 py-3.5 text-sm font-semibold transition-colors duration-300 hover:bg-accent hover:text-white"
+              >
+                View selected work
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="transition-transform duration-500 ease-expo group-hover:translate-y-0.5"
+                >
+                  <path d="M12 5v14M19 12l-7 7-7-7" />
+                </svg>
+              </button>
+            </Magnetic>
+            <button
+              onClick={() => scrollToId("contact")}
+              className="link-sweep font-mono text-[12px] tracking-[0.18em] uppercase text-paper"
+            >
+              Get in touch
+            </button>
+          </motion.div>
+        </div>
+
+        {/* Bottom meta bar */}
+        <motion.div
+          variants={fadeVariants}
+          custom={0.85}
+          initial="hidden"
+          animate={anim}
+          className="border-t hairline pt-5 flex items-center justify-between gap-4"
+        >
+          <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-mute">
+            Based in {siteMeta.location} — working worldwide
+          </span>
+          <span
+            className="hidden sm:flex items-center gap-3 font-mono text-[11px] tracking-[0.18em] uppercase text-mute"
+            aria-hidden="true"
+          >
+            Scroll
+            <span className="relative w-px h-8 bg-paper/20 overflow-hidden">
+              <motion.span
+                className="absolute top-0 left-0 w-full h-1/2 bg-accent-soft"
+                animate={{ y: ["-100%", "220%"] }}
+                transition={{
+                  duration: 1.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            </span>
+          </span>
+          <span className="font-mono text-[10px] sm:text-[11px] tracking-[0.18em] uppercase text-mute">
+            ©2026
+          </span>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

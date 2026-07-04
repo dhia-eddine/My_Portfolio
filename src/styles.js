@@ -1,17 +1,14 @@
 const styles = {
-  paddingX: "sm:px-16 px-6",
-  paddingY: "sm:py-16 py-6",
-  padding: "sm:px-16 px-6 sm:py-16 py-10",
+  // Global horizontal gutters — one system everywhere
+  paddingX: "px-5 sm:px-10 lg:px-16 xl:px-24",
+  // Vertical rhythm between sections
+  sectionY: "py-24 sm:py-32 lg:py-40",
 
   heroHeadText:
-    "font-black text-white lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2",
-  heroSubText:
-    "text-[#dfd9ff] font-medium lg:text-[28px] sm:text-[22px] xs:text-[18px] text-[16px] lg:leading-[40px]",
-
+    "font-display font-medium text-[3rem] leading-[0.92] tracking-[-0.02em] text-paper uppercase select-none xs:text-[3.75rem] sm:text-[5rem] md:text-[5.625rem] lg:text-[6.25rem] xl:text-[7rem] 2xl:text-[7.5rem]",
   sectionHeadText:
-    "text-white font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[30px]",
-  sectionSubText:
-    "sm:text-[18px] text-[14px] text-[#915eff] uppercase tracking-widest font-semibold",
+    "font-display font-medium text-display-lg text-paper tracking-tight",
+  sectionSubText: "text-mute text-base sm:text-lg leading-relaxed max-w-2xl",
 };
 
 export { styles };

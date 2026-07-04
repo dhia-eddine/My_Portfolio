@@ -1,39 +1,38 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { projects } from "../constants";
-import { fadeIn, staggerContainer } from "../utils/motion";
-import { github } from "../assets";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { projects, siteMeta } from "../constants";
+import { styles } from "../styles";
+import { EASE } from "../utils/motion";
+import { RevealLines, FadeUp } from "./ui/Reveal";
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const project = projects.find((p) => p.id === id);
+  const nextProject =
+    projects[(projects.findIndex((p) => p.id === id) + 1) % projects.length];
   const [lightbox, setLightbox] = useState(null);
-  const [slideDirection, setSlideDirection] = useState(0); // -1: prev, 1: next
+  const [slideDirection, setSlideDirection] = useState(0);
   const touchStartRef = useRef({ x: 0, y: 0 });
-  const lightboxRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     if (project) {
-      document.title = `${project.name} | Dhia Eddine Mandhouj Portfolio`;
+      document.title = `${project.name} | ${siteMeta.fullName}`;
     }
   }, [id, project]);
 
   const goPrev = () => {
     setSlideDirection(-1);
-    setLightbox((current) =>
-      current !== null && current > 0 ? current - 1 : current,
-    );
+    setLightbox((cur) => (cur !== null && cur > 0 ? cur - 1 : cur));
   };
 
   const goNext = () => {
     if (!project) return;
     setSlideDirection(1);
-    setLightbox((current) =>
-      current !== null && current < project.gallery.length - 1
-        ? current + 1
-        : current,
+    setLightbox((cur) =>
+      cur !== null && cur < project.gallery.length - 1 ? cur + 1 : cur,
     );
   };
 
@@ -46,464 +45,373 @@ const ProjectDetail = () => {
     const touch = event.changedTouches[0];
     const deltaX = touch.clientX - touchStartRef.current.x;
     const deltaY = touch.clientY - touchStartRef.current.y;
-    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
-    const threshold = 40;
-
-    if (!isHorizontalSwipe || Math.abs(deltaX) < threshold) return;
-
-    if (deltaX > 0) {
-      goPrev();
-    } else {
-      goNext();
-    }
+    if (Math.abs(deltaX) < Math.abs(deltaY) || Math.abs(deltaX) < 40) return;
+    if (deltaX > 0) goPrev();
+    else goNext();
   };
 
-  // Keyboard navigation for desktop
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (lightbox === null) return;
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        goPrev();
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault();
-        goNext();
-      } else if (e.key === "Escape") {
-        e.preventDefault();
-        setLightbox(null);
-      }
-    };
+  const goToHomeSection = (sectionId) => {
+    navigate({ pathname: "/", search: `?scrollTo=${sectionId}` });
+  };
 
-    if (lightbox !== null) {
-      window.addEventListener("keydown", handleKeyDown);
-      return () => window.removeEventListener("keydown", handleKeyDown);
-    }
-  }, [lightbox, project]);
+  useEffect(() => {
+    if (lightbox === null) return undefined;
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowLeft") goPrev();
+      else if (e.key === "ArrowRight") goNext();
+      else if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lightbox]);
+
+  useEffect(() => {
+    document.body.style.overflow = lightbox !== null ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [lightbox]);
+
   if (!project) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="min-h-screen flex items-center justify-center"
-      >
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-secondary text-xl mb-4">Project not found.</p>
-          <Link to="/" className="text-[#915eff] font-medium hover:underline">
+          <p className="text-mute text-xl mb-4">Project not found.</p>
+          <Link to="/" className="link-sweep text-accent-soft font-medium">
             ← Back to home
           </Link>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
-  const hasGallery = project.gallery && project.gallery.length > 0;
+  const meta = [
+    { label: "Year", value: project.year },
+    { label: "Role", value: project.role },
+    { label: "Stack", value: project.tags.map((t) => t.name).join(" · ") },
+  ];
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={id}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.4 }}
-        className="min-h-screen"
-      >
-        {/* ── Hero banner ── */}
-        <div className="relative w-full h-[55vh] min-h-[320px] max-h-[480px] overflow-hidden">
+    <motion.main
+      key={id}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className={`${styles.paddingX} max-w-[1680px] mx-auto min-h-screen pt-28 sm:pt-36 pb-20`}
+      id="main"
+    >
+      {/* Back */}
+      <FadeUp y={0}>
+        <button
+          type="button"
+          onClick={() => goToHomeSection("work")}
+          className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] uppercase text-mute hover:text-paper transition-colors"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-transform duration-500 ease-expo group-hover:-translate-x-1"
+          >
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          All projects
+        </button>
+      </FadeUp>
+
+      {/* Title */}
+      <div className="mt-10 sm:mt-14 flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <span className="font-mono text-[11px] tracking-[0.2em] text-accent-soft/80">
+            ({project.index})
+          </span>
+          <RevealLines
+            as="h1"
+            lines={[project.name]}
+            className="mt-3 font-display font-medium text-display-lg text-paper"
+          />
+          <FadeUp delay={0.15}>
+            <p className="mt-3 text-mute text-lg sm:text-xl">
+              {project.tagline}
+            </p>
+          </FadeUp>
+        </div>
+        {project.source_code_link && (
+          <FadeUp delay={0.2}>
+            <a
+              href={project.source_code_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="link"
+              className="group inline-flex items-center gap-3 rounded-full bg-paper text-ink px-6 py-3 text-sm font-semibold transition-colors duration-300 hover:bg-accent hover:text-white"
+            >
+              {project.link_label ?? "View source"}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-500 ease-expo group-hover:translate-x-1 group-hover:-translate-y-1"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </a>
+          </FadeUp>
+        )}
+      </div>
+
+      {/* Hero image */}
+      <FadeUp delay={0.25} className="mt-12 sm:mt-16">
+        <div className="relative overflow-hidden rounded-lg border hairline bg-ink-700">
           <img
             src={project.image}
-            alt={project.name}
-            className="w-full h-full object-cover object-top scale-105"
+            alt={`${project.name} — main interface`}
+            className="w-full max-h-[72vh] object-cover object-top"
           />
-          {/* gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-primary" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-transparent to-transparent" />
-
-          {/* Back button over banner */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="absolute top-24 left-6 sm:left-16"
-          >
-            <Link
-              to={{ pathname: "/", hash: "#work" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-black/40 backdrop-blur-sm border border-white/10 text-white/80 hover:text-white hover:bg-black/60 hover:border-[#915eff]/40 transition-all duration-300 text-sm font-medium"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 12H5M12 5l-7 7 7 7" />
-              </svg>
-              Back to projects
-            </Link>
-          </motion.div>
-
-          {/* Title over banner */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="absolute bottom-10 left-6 sm:left-16 max-w-3xl"
-          >
-            <div className="flex flex-wrap gap-2 mb-3">
-              {project.tags.slice(0, 4).map((tag, i) => (
-                <span
-                  key={i}
-                  className={`text-xs px-3 py-1 rounded-full font-semibold bg-black/50 backdrop-blur-sm border border-white/10 ${tag.color}`}
-                >
-                  #{tag.name}
-                </span>
-              ))}
-            </div>
-            <h1 className="text-white font-black text-3xl sm:text-4xl lg:text-5xl leading-tight drop-shadow-2xl">
-              {project.name}
-            </h1>
-          </motion.div>
         </div>
+      </FadeUp>
 
-        {/* ── Content ── */}
-        <div className="max-w-6xl mx-auto px-6 sm:px-16 py-12">
-          {/* Meta row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-wrap items-center gap-4 mb-12"
-          >
-            {project.source_code_link && (
-              <a
-                href={project.source_code_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:border-[#915eff]/50 hover:bg-[#915eff]/10 transition-all duration-300 text-white text-sm font-medium"
+      {/* Meta + description */}
+      <div className="mt-14 sm:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <FadeUp className="lg:col-span-4">
+          <div className="border-t hairline">
+            {meta.map((row) => (
+              <div
+                key={row.label}
+                className="flex justify-between gap-6 py-4 border-b hairline"
               >
-                {project.link_label ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12 15.3 15.3 0 0 1 12 2z" />
-                  </svg>
-                ) : (
-                  <img src={github} alt="GitHub" className="w-5 h-5" />
-                )}
-                {project.link_label ?? "View source"}
-              </a>
-            )}
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className={`text-xs px-3 py-1.5 rounded-full font-medium bg-white/5 border border-white/8 ${tag.color}`}
-                >
-                  {tag.name}
+                <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-mute shrink-0 pt-0.5">
+                  {row.label}
                 </span>
-              ))}
-            </div>
-          </motion.div>
+                <span className="text-sm text-paper/85 text-right">
+                  {row.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </FadeUp>
+        <FadeUp delay={0.1} className="lg:col-span-7 lg:col-start-6">
+          <span className="eyebrow mb-5 inline-flex">About this project</span>
+          <p className="text-paper/80 text-lg sm:text-xl leading-relaxed">
+            {project.description}
+          </p>
+        </FadeUp>
+      </div>
 
-          {/* Description */}
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-16"
+      {/* Gallery */}
+      {project.gallery?.length > 0 && (
+        <div className="mt-20 sm:mt-28">
+          <FadeUp
+            y={0}
+            className="flex items-baseline justify-between border-t hairline pt-5 mb-10"
           >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#915eff] to-blue-500" />
-              <h2 className="text-white font-bold text-xl">
-                About this project
-              </h2>
-            </div>
-            <p className="text-secondary text-[17px] leading-[32px] max-w-3xl pl-4 border-l border-white/5">
-              {project.description}
-            </p>
-          </motion.section>
+            <span className="eyebrow">Gallery</span>
+            <span className="font-mono text-[11px] tracking-[0.2em] text-mute">
+              {String(project.gallery.length).padStart(2, "0")} shots
+            </span>
+          </FadeUp>
 
-          {/* Gallery */}
-          {hasGallery && (
-            <motion.section
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.05 }}
-              variants={staggerContainer(0.04, 0.1)}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-1 h-6 rounded-full bg-gradient-to-b from-[#915eff] to-blue-500" />
-                <h2 className="text-white font-bold text-xl">
-                  Gallery
-                  <span className="ml-2 text-secondary text-sm font-normal">
-                    ({project.gallery.length} screenshots)
-                  </span>
-                </h2>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {project.gallery.map((img, index) => (
+              <motion.button
+                key={index}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-4% 0px" }}
+                transition={{
+                  duration: 0.6,
+                  ease: EASE,
+                  delay: (index % 3) * 0.07,
+                }}
+                onClick={() => setLightbox(index)}
+                data-cursor="view"
+                aria-label={`Open screenshot ${index + 1} of ${project.gallery.length}`}
+                className="group relative rounded-lg overflow-hidden border hairline bg-ink-700 text-left"
+              >
+                <div className="aspect-video overflow-hidden">
+                  <img
+                    src={img}
+                    alt={`${project.name} screenshot ${index + 1}`}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-expo group-hover:scale-[1.04]"
+                  />
+                </div>
+                <span className="absolute bottom-3 right-3 font-mono text-[10px] tracking-[0.14em] text-paper/80 bg-ink/70 backdrop-blur-sm rounded-full px-2.5 py-1">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {project.gallery.map((img, index) => (
-                  <motion.div
-                    key={index}
-                    variants={fadeIn("up", "spring", index * 0.04, 0.5)}
-                    className="group relative rounded-xl overflow-hidden bg-[#0f0c24] border border-white/5 hover:border-[#915eff]/40 transition-all duration-300 cursor-pointer shadow-card"
-                    onClick={() => setLightbox(index)}
-                    whileHover={{ y: -4 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <div className="aspect-video overflow-hidden">
-                      {img && img.toString().endsWith(".gif") ? (
-                        <img
-                          src={img}
-                          alt={`Screenshot ${index + 1}`}
-                          className="w-full h-full object-cover object-top"
-                        />
-                      ) : (
-                        <img
-                          src={img}
-                          alt={`Screenshot ${index + 1}`}
-                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                        />
-                      )}
-                    </div>
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
-                        </svg>
-                      </div>
-                    </div>
-                    {/* Index badge */}
-                    <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                      <span className="text-white/70 text-[10px] font-bold">
-                        {index + 1}
-                      </span>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.section>
-          )}
+      {/* Next project */}
+      <div className="mt-24 sm:mt-32 border-t hairline pt-10">
+        <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute mb-4">
+          Next project
+        </p>
+        <Link
+          to={`/project/${nextProject.id}`}
+          className="group inline-flex items-baseline gap-4"
+        >
+          <span className="font-display text-3xl sm:text-5xl font-medium text-paper group-hover:text-accent-soft transition-colors duration-300">
+            {nextProject.name}
+          </span>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-paper transition-transform duration-500 ease-expo group-hover:translate-x-2 group-hover:-translate-y-1 self-center"
+          >
+            <path d="M7 17L17 7M17 7H7M17 7v10" />
+          </svg>
+        </Link>
+        <div className="mt-12 flex justify-between items-center flex-wrap gap-4">
+          <button
+            type="button"
+            onClick={() => goToHomeSection("work")}
+            className="link-sweep font-mono text-[11px] tracking-[0.18em] uppercase text-mute hover:text-paper transition-colors"
+          >
+            ← Back to all projects
+          </button>
+          <button
+            type="button"
+            onClick={() => goToHomeSection("contact")}
+            className="link-sweep font-mono text-[11px] tracking-[0.18em] uppercase text-paper"
+          >
+            Get in touch
+          </button>
+        </div>
+      </div>
 
-          {/* Bottom nav */}
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox !== null && (
           <motion.div
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-16 pt-8 border-t border-white/5 flex justify-between items-center flex-wrap gap-4"
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[130] bg-ink/95 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setLightbox(null)}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image viewer"
           >
-            <Link
-              to={{ pathname: "/", hash: "#work" }}
-              className="inline-flex items-center gap-2 text-secondary hover:text-white transition-colors text-sm font-medium"
+            <div
+              className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M19 12H5M12 5l-7 7 7 7" />
-              </svg>
-              Back to all projects
-            </Link>
-            <Link
-              to={{ pathname: "/", hash: "#contact" }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-300 hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg, #915eff, #2563eb)",
-                boxShadow: "0 4px 20px rgba(145,94,255,0.3)",
-              }}
-            >
-              Get in touch
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </motion.div>
-        </div>
-
-        {/* ── Lightbox ── */}
-        <AnimatePresence mode="wait">
-          {lightbox !== null && (
-            <motion.div
-              ref={lightboxRef}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 z-50 bg-black/92 backdrop-blur-md flex items-center justify-center p-4 cursor-grab active:cursor-grabbing"
-              onClick={() => setLightbox(null)}
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
-            >
-              <div
-                className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <AnimatePresence
-                  initial={false}
+              <AnimatePresence initial={false} custom={slideDirection} mode="popLayout">
+                <motion.img
+                  key={lightbox}
                   custom={slideDirection}
-                  mode="popLayout"
+                  src={project.gallery[lightbox]}
+                  alt={`${project.name} screenshot ${lightbox + 1}`}
+                  className="max-w-full max-h-[82vh] w-auto h-auto object-contain rounded-lg border hairline"
+                  variants={{
+                    enter: (dir) => ({
+                      x: dir >= 0 ? "12%" : "-12%",
+                      opacity: 0,
+                    }),
+                    center: { x: 0, opacity: 1 },
+                    exit: (dir) => ({
+                      x: dir >= 0 ? "-12%" : "12%",
+                      opacity: 0,
+                    }),
+                  }}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.35, ease: EASE }}
+                />
+              </AnimatePresence>
+
+              <button
+                onClick={() => setLightbox(null)}
+                aria-label="Close viewer"
+                className="absolute -top-1 right-0 sm:top-2 sm:right-2 w-10 h-10 rounded-full bg-ink/80 border hairline flex items-center justify-center text-paper hover:border-accent-soft/60 transition-colors"
+              >
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 >
-                  <motion.img
-                    key={lightbox}
-                    custom={slideDirection}
-                    src={project.gallery[lightbox]}
-                    alt={`Screenshot ${lightbox + 1}`}
-                    className="max-w-full max-h-[85vh] w-auto h-auto object-contain rounded-2xl shadow-2xl"
-                    variants={{
-                      enter: (dir) => ({
-                        x: dir >= 0 ? "60%" : "-60%",
-                        opacity: 0,
-                        scale: 0.88,
-                        rotateY: dir >= 0 ? 12 : -12,
-                      }),
-                      center: {
-                        x: 0,
-                        opacity: 1,
-                        scale: 1,
-                        rotateY: 0,
-                      },
-                      exit: (dir) => ({
-                        x: dir >= 0 ? "-60%" : "60%",
-                        opacity: 0,
-                        scale: 0.88,
-                        rotateY: dir >= 0 ? -12 : 12,
-                      }),
-                    }}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      x: { type: "spring", stiffness: 320, damping: 32 },
-                      opacity: { duration: 0.22 },
-                      scale: { duration: 0.22 },
-                      rotateY: { duration: 0.28 },
-                    }}
-                  />
-                </AnimatePresence>
-                {/* Close */}
-                <motion.button
-                  onClick={() => setLightbox(null)}
-                  className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              </button>
+
+              {lightbox > 0 && (
+                <button
+                  onClick={goPrev}
+                  aria-label="Previous image"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-ink/80 border hairline flex items-center justify-center text-paper hover:border-accent-soft/60 transition-colors"
                 >
                   <svg
-                    width="16"
-                    height="16"
+                    width="17"
+                    height="17"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="2.5"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    <path d="M18 6 6 18M6 6l12 12" />
+                    <path d="M15 18l-6-6 6-6" />
                   </svg>
-                </motion.button>
-                {/* Prev / Next */}
-                {lightbox > 0 && (
-                  <motion.button
-                    onClick={goPrev}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-                    whileHover={{ scale: 1.15, x: -4 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                  </motion.button>
-                )}
-                {lightbox < project.gallery.length - 1 && (
-                  <motion.button
-                    onClick={goNext}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-                    whileHover={{ scale: 1.15, x: 4 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </motion.button>
-                )}
-                {/* Counter */}
-                <motion.div
-                  className="absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white/70 text-xs font-medium"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
+                </button>
+              )}
+              {lightbox < project.gallery.length - 1 && (
+                <button
+                  onClick={goNext}
+                  aria-label="Next image"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-ink/80 border hairline flex items-center justify-center text-paper hover:border-accent-soft/60 transition-colors"
                 >
-                  {lightbox + 1} / {project.gallery.length}
-                </motion.div>
-                {/* Navigation hints */}
-                <motion.div
-                  className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white/60 text-[10px] font-medium text-center"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                >
-                  <div className="sm:hidden">Swipe to navigate</div>
-                  <div className="hidden sm:block">← → or click arrows</div>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </AnimatePresence>
+                  <svg
+                    width="17"
+                    height="17"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+              )}
+
+              <span className="absolute bottom-2 left-1/2 -translate-x-1/2 font-mono text-[11px] tracking-[0.18em] text-paper/80 bg-ink/80 border hairline rounded-full px-3.5 py-1.5 tabular-nums">
+                {String(lightbox + 1).padStart(2, "0")} /{" "}
+                {String(project.gallery.length).padStart(2, "0")}
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.main>
   );
 };
 

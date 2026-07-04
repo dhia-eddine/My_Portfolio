@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
+import { MotionConfig } from "framer-motion";
 import {
   HashRouter,
   Routes,
@@ -13,76 +14,97 @@ import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
 import Tech from "./components/Tech";
 import Works from "./components/Works";
+import Preloader from "./components/ui/Preloader";
+import CustomCursor from "./components/ui/CustomCursor";
+import { initLenis, scrollToId } from "./lib/lenis";
+import { siteMeta } from "./constants";
 
 const ProjectDetail = lazy(() => import("./components/ProjectDetail"));
 
 const ScrollToHash = () => {
-  const { pathname, hash } = useLocation();
+  const { pathname, search, hash, state } = useLocation();
   useEffect(() => {
-    if (pathname === "/" && hash) {
-      const id = hash.replace("#", "");
+    const params = new URLSearchParams(search);
+    const targetId =
+      params.get("scrollTo") ?? state?.scrollTo ?? hash?.replace("#", "");
+    const timers = [];
+
+    if (pathname === "/" && targetId) {
       const tryScroll = (attempts = 0) => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else if (attempts < 10) {
-          setTimeout(() => tryScroll(attempts + 1), 100);
+        if (!scrollToId(targetId, { immediate: attempts > 0 }) && attempts < 10) {
+          timers.push(setTimeout(() => tryScroll(attempts + 1), 100));
         }
       };
-      tryScroll();
+      requestAnimationFrame(() => tryScroll());
+
+      [250, 700, 1300, 2200].forEach((delay) => {
+        timers.push(
+          setTimeout(() => {
+            scrollToId(targetId, { immediate: true });
+          }, delay),
+        );
+      });
     }
-  }, [pathname, hash]);
+
+    return () => timers.forEach((timer) => clearTimeout(timer));
+  }, [pathname, search, hash, state]);
   return null;
 };
 
 const HomePage = () => {
   useEffect(() => {
-    document.title = "Dhia Eddine Mandhouj | Full Stack Developer";
+    document.title = `${siteMeta.fullName} | Full Stack Developer`;
   }, []);
 
   return (
     <>
       <ScrollToHash />
-      <div>
-        <Navbar />
+      <Navbar />
+      <main id="main">
         <Hero />
-      </div>
-      <About />
-      <Experience />
-      <Tech />
-      <Works />
-      <div className="relative z-0">
+        <About />
+        <Experience />
+        <Tech />
+        <Works />
         <Contact />
-      </div>
+      </main>
     </>
   );
 };
 
 const App = () => {
+  useEffect(() => {
+    initLenis();
+  }, []);
+
   return (
-    <HashRouter>
-      <div className="relative z-0">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route
-            path="/project/:id"
-            element={
-              <Suspense
-                fallback={
-                  <div className="min-h-screen flex items-center justify-center text-secondary">
-                    Loading project...
-                  </div>
-                }
-              >
-                <Navbar />
-                <ProjectDetail />
-              </Suspense>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-    </HashRouter>
+    <MotionConfig reducedMotion="user">
+      <HashRouter>
+        <Preloader />
+        <CustomCursor />
+        <div className="relative grain">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/project/:id"
+              element={
+                <Suspense
+                  fallback={
+                    <div className="min-h-screen flex items-center justify-center font-mono text-[11px] tracking-[0.22em] uppercase text-mute">
+                      Loading project…
+                    </div>
+                  }
+                >
+                  <Navbar />
+                  <ProjectDetail />
+                </Suspense>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </HashRouter>
+    </MotionConfig>
   );
 };
 
