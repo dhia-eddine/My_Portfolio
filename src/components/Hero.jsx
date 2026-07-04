@@ -58,25 +58,8 @@ const Hero = () => {
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className={`${styles.paddingX} relative z-10 max-w-[1680px] mx-auto w-full flex-1 flex flex-col justify-end pb-6 pt-28 sm:pt-36`}
+        className={`${styles.paddingX} relative z-10 max-w-[1680px] mx-auto w-full flex-1 flex flex-col justify-start pb-6 pt-28 sm:pt-36 lg:pt-20`}
       >
-        {/* Availability */}
-        <motion.div
-          variants={fadeVariants}
-          custom={0.1}
-          initial="hidden"
-          animate={anim}
-          className="flex items-center gap-3 mb-10 sm:mb-14"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-          </span>
-          <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-mute">
-            {siteMeta.availability}
-          </span>
-        </motion.div>
-
         {/* Identity */}
         <h1 className={styles.heroHeadText}>
           <span className="mask-line">
