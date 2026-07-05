@@ -166,7 +166,7 @@ const Contact = () => {
           © 2026 {siteMeta.fullName}
         </p>
         <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-mute hidden sm:block">
-          Designed &amp; built with React, Three.js &amp; Tailwind
+          Designed &amp; built with love
         </p>
         <button
           onClick={() => scrollToTop()}
