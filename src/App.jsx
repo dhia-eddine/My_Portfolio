@@ -82,7 +82,7 @@ const App = () => {
       <HashRouter>
         <Preloader />
         <CustomCursor />
-        <div className="relative grain">
+        <div className="relative">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route
