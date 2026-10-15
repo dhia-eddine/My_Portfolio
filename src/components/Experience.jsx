@@ -1,25 +1,65 @@
 /* eslint-disable react/prop-types -- experience shape from constants */
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { experiences } from "../constants";
 import { SectionWrapper } from "../hoc";
+import { getLenis } from "../lib/lenis";
 import { EASE } from "../utils/motion";
 import SectionHeading from "./ui/SectionHeading";
+
+const PANEL_DURATION = 0.6;
+
+/**
+ * Keep `el` at the same viewport position while rows above it collapse,
+ * so the row the user clicked doesn't jump up the page.
+ */
+const pinToViewport = (el, ms) => {
+  const startTop = el.getBoundingClientRect().top;
+  const lenis = getLenis();
+  const t0 = performance.now();
+
+  const step = (now) => {
+    if (!el.isConnected) return;
+    const delta = el.getBoundingClientRect().top - startTop;
+    if (Math.abs(delta) > 0.5) {
+      if (lenis)
+        lenis.scrollTo(lenis.scroll + delta, { immediate: true, force: true });
+      else window.scrollBy(0, delta);
+    }
+    if (now - t0 < ms) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+};
 
 const ExperienceRow = ({ experience, i, openIndex, setOpenIndex }) => {
   const isOpen = openIndex === i;
   const panelId = `experience-panel-${i}`;
+  const rowRef = useRef(null);
+
+  const toggle = () => {
+    const willOpen = !isOpen;
+    const rowAboveIsOpen = openIndex !== -1 && openIndex < i;
+    setOpenIndex(willOpen ? i : -1);
+    if (willOpen && rowAboveIsOpen && rowRef.current) {
+      pinToViewport(rowRef.current, PANEL_DURATION * 1000 + 100);
+    }
+  };
 
   return (
     <motion.li
+      ref={rowRef}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-6% 0px" }}
-      transition={{ duration: 0.7, ease: EASE, delay: Math.min(i * 0.05, 0.25) }}
+      transition={{
+        duration: 0.7,
+        ease: EASE,
+        delay: Math.min(i * 0.05, 0.25),
+      }}
       className="border-t hairline last:border-b"
     >
       <button
-        onClick={() => setOpenIndex(isOpen ? -1 : i)}
+        onClick={toggle}
         aria-expanded={isOpen}
         aria-controls={panelId}
         className="group w-full grid grid-cols-12 items-center gap-3 sm:gap-4 py-6 sm:py-8 text-left"
@@ -75,7 +115,7 @@ const ExperienceRow = ({ experience, i, openIndex, setOpenIndex }) => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ duration: PANEL_DURATION, ease: EASE }}
             className="overflow-hidden"
           >
             <div className="grid grid-cols-12 gap-4 pb-8 sm:pb-10">

@@ -4,6 +4,7 @@ import enova from "./company/enova.png";
 import proxicon from "./company/proxicon.png";
 import irontech from "./company/irontech.png";
 import iron_school from "./company/iron_school.png";
+import snowscape from "./company/snowscape-logo.svg";
 
 // Iron School project images
 import ironSchoolIntro from "./prject_images/iron-school/iron_school_intro.png";
@@ -49,6 +50,7 @@ export {
   enova,
   irontech,
   iron_school,
+  snowscape,
   proxicon,
   ironSchoolIntro,
   ironSchoolAdmin1,

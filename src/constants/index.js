@@ -2,6 +2,7 @@ import {
   enova,
   irontech,
   iron_school,
+  snowscape,
   logo,
   proxicon,
   ironSchoolIntro,
@@ -97,7 +98,7 @@ const services = [
 
 const stats = [
   { value: "2022", label: "Working since" },
-  { value: "06", label: "Roles & internships" },
+  { value: "07", label: "Roles & internships" },
   { value: "02", label: "Featured case studies" },
   { value: "15+", label: "Technologies in play" },
 ];
@@ -193,6 +194,21 @@ const techGroups = [
 ];
 
 const experiences = [
+  {
+    title: "Frontend Developer (Web & Mobile)",
+    company_name: "Snowscape",
+    icon: snowscape,
+    date: "Apr 2026 – Present",
+    points: [
+      "Developed route planning features for snow removal and landscaping operations across a React and TypeScript web application and a React Native and Expo mobile application, integrating live route-builder APIs.",
+      "Built map-based planning workflows with drag-and-drop route editing, grouped routes, property visits, route reordering, temporary-route expiration, and input validation.",
+      "Improved route generation with configurable service-time estimates and start/end locations, plan regeneration, warnings for unassigned properties, and configuration editing for resumed drafts.",
+      "Delivered property service-status reporting and filters, and improved mobile route pause and resume workflows with accurate paused-time tracking.",
+      "Improved mobile job notes and image handling, introduced in-app What's New announcements, and added unit and component tests for key workflows.",
+    ],
+    project_d:
+      "A web and mobile operations platform for snow removal and landscaping teams, connecting map-based route planning with property servicing and field reporting.",
+  },
   {
     title: "Full Stack Developer",
     company_name: "Moonify-Tech",
