@@ -201,13 +201,17 @@ const experiences = [
     date: "Apr 2026 – Present",
     points: [
       "Developed route planning features for snow removal and landscaping operations across a React and TypeScript web application and a React Native and Expo mobile application, integrating live route-builder APIs.",
-      "Built map-based planning workflows with drag-and-drop route editing, grouped routes, property visits, route reordering, temporary-route expiration, and input validation.",
-      "Improved route generation with configurable service-time estimates and start/end locations, plan regeneration, warnings for unassigned properties, and configuration editing for resumed drafts.",
+      "Built map-based planning workflows with grouped routes, property visits, temporary-route expiration, bulk route deletion, and input validation. Added property-card map focus, address tooltips, and distinct markers for unassigned properties.",
+      "Refined drag-and-drop route editing with full-card dragging, drop-position indicators, and reordering within and between routes and unassigned properties. Improved loading feedback and prevented overlapping group-reorder saves.",
+      "Redesigned route-generation setup with optional time constraints, maximum route duration, default service-time estimates, and configurable start/end locations. Preserved settings and property edits when returning to setup or reopening saved drafts.",
+      "Added plan regeneration after service-time corrections, with confirmation before replacing manual route edits. Built prompts for properties that do not fit route constraints, allowing users to include them or keep the generated plan.",
+      "Fixed route-update failures when adding and deleting routes in the same editing session, and preserved depot details and instructions across route edits.",
       "Delivered property service-status reporting and filters, and improved mobile route pause and resume workflows with accurate paused-time tracking.",
-      "Improved mobile job notes and image handling, introduced in-app What's New announcements, and added unit and component tests for key workflows.",
+      "Reduced mobile storage usage through Redux Persist transforms that remove unused site-map GeoJSON and driving-path data while preserving offline job records, draft notes and images, paused routes, and pending time records.",
+      "Combined mobile job notes and photo submission, improved image selection and background uploads, and introduced in-app What's New announcements with image support. Added unit and component coverage for route planning, geofencing, and storage persistence.",
     ],
     project_d:
-      "A web and mobile operations platform for snow removal and landscaping teams, connecting map-based route planning with property servicing and field reporting.",
+      "A web and mobile operations platform for snow removal and landscaping teams, connecting interactive route planning and plan regeneration with geofenced property servicing, offline field records, and job reporting.",
   },
   {
     title: "Full Stack Developer",
