@@ -2,7 +2,7 @@ import {
   enova,
   irontech,
   iron_school,
-  snowscape,
+  moonifyTech,
   logo,
   proxicon,
   ironSchoolIntro,
@@ -196,8 +196,8 @@ const techGroups = [
 const experiences = [
   {
     title: "Frontend Developer (Web & Mobile)",
-    company_name: "Snowscape",
-    icon: snowscape,
+    company_name: "Moonify-Tech",
+    icon: moonifyTech,
     date: "Apr 2026 – Present",
     points: [
       "Developed route planning features for snow removal and landscaping operations across a React and TypeScript web application and a React Native and Expo mobile application, integrating live route-builder APIs.",
